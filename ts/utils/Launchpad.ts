@@ -62,7 +62,7 @@ export default class Launchpad {
     getType(): Promise<LaunchpadTypes> {
         return new Promise(async (resolve) => {
             const listenerTimer = setTimeout(() => {
-                console.log("removing");
+                // console.log("removing");
                 this.input.removeListener("sysex", () => {
                     console.log('removed')
                 });
@@ -73,10 +73,10 @@ export default class Launchpad {
             this.input.addListener("sysex", async (e) => {
                 clearTimeout(listenerTimer);
 
-                console.log("removing");
-                console.log(e);
+                // console.log("removing");
+                // console.log(e);
                 this.input.removeListener("sysex", () => {
-                    console.log('removed')
+                    // console.log('removed')
                 });
 
                 resolve(await this.nameentify(e));

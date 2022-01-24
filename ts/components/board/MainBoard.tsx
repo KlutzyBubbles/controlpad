@@ -1,13 +1,13 @@
 import * as React from 'react'
 import {
-  ColorMapping,
+  StateMapping,
   RowMapping, Section
 } from '../../interfaces'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface MainBoardProps extends React.ClassAttributes<MainBoard> {
   mainMapping: RowMapping[]
-  mainMappingColors: ColorMapping[]
+  mainMappingStates: StateMapping[]
   selectButton: Function
 }
 
@@ -17,16 +17,16 @@ export default class MainBoard extends React.Component<MainBoardProps> {
     this.selectButton = this.selectButton.bind(this);
   }
 
-  selectButton(x?: number, y?: number, deselectNotify?: Function) {
+  selectButton(x?: number, y?: number) {
     if (x === undefined || y === undefined) {
       this.props.selectButton(undefined)
     } else {
-      this.props.selectButton(Section.Main, x, y, deselectNotify)
+      this.props.selectButton(Section.Main, x, y)
     }
   }
 
-  getColorMapping(x: number, y: number) {
-    for (var item of this.props.mainMappingColors) {
+  getStateMapping(x: number, y: number): StateMapping {
+    for (var item of this.props.mainMappingStates) {
       if (item.x === x && item.y === y)
         return item
     }
@@ -37,17 +37,23 @@ export default class MainBoard extends React.Component<MainBoardProps> {
       inactiveColor: { r: 0, g: 0, b: 0 },
       pulsing: false,
       flashing: false,
+      editing: false,
+      pressed: false
     }
   }
 
   public render (): JSX.Element {
     var rows: JSX.Element[] = []
+    // console.log('mainMappingStates')
+    // console.log(this.props.mainMappingStates)
     var yCount = 8;
     for (var rowMapping of this.props.mainMapping) {
       var buttons: JSX.Element[] = []
       var xCount = 1;
       for (var id of rowMapping.two) {
-        var colorMapping = this.getColorMapping(xCount, yCount)
+        var stateMapping = this.getStateMapping(xCount, yCount)
+        // console.log('mainMappingStates stateMapping')
+        // console.log(stateMapping)
         buttons.push(
           <BoardButton
             selectButton={this.selectButton}
@@ -56,10 +62,12 @@ export default class MainBoard extends React.Component<MainBoardProps> {
             y={yCount}
             type={BoardButtonType.Square}
             id={[rowMapping.one, id]}
-            activeColor={colorMapping.activeColor}
-            inactiveColor={colorMapping.inactiveColor}
-            flashing={colorMapping.flashing}
-            pulsing={colorMapping.pulsing}
+            activeColor={stateMapping.activeColor}
+            inactiveColor={stateMapping.inactiveColor}
+            flashing={stateMapping.flashing}
+            pulsing={stateMapping.pulsing}
+            editing={stateMapping.editing}
+            pressed={stateMapping.pressed}
           />
         )
         xCount++;

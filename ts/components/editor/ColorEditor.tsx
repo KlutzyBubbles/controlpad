@@ -59,7 +59,6 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
     };
 
     handleInactiveChange = (color) => {
-        console.log(color)
         if (this.props.selectedButton !== undefined)
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.toRgb6(color.rgb), false)
         this.setState({ inactiveColor: color.rgb })

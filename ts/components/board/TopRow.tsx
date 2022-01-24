@@ -1,13 +1,13 @@
 import * as React from 'react'
 import {
-  ColorMapping,
+  StateMapping,
   RowMapping, Section
 } from '../../interfaces'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface TopRowProps extends React.ClassAttributes<TopRow> {
   topMapping: RowMapping
-  topMappingColors: ColorMapping[]
+  topMappingStates: StateMapping[]
   selectButton: Function
 }
 
@@ -16,16 +16,16 @@ export default class TopRow extends React.Component<TopRowProps> {
     super(props)
   }
 
-  selectButton(x?: number, y?: number, deselectNotify?: Function) {
+  selectButton(x?: number, y?: number) {
     if (x === undefined || y === undefined) {
       this.props.selectButton(undefined)
     } else {
-      this.props.selectButton(Section.Top, x, y, deselectNotify)
+      this.props.selectButton(Section.Top, x, y)
     }
   }
 
-  getColorMapping(x: number, y: number) {
-    for (var item of this.props.topMappingColors) {
+  getStateMapping(x: number, y: number): StateMapping {
+    for (var item of this.props.topMappingStates) {
       if (item.x === x && item.y === y)
         return item
     }
@@ -36,6 +36,8 @@ export default class TopRow extends React.Component<TopRowProps> {
       inactiveColor: { r: 0, g: 0, b: 0 },
       pulsing: false,
       flashing: false,
+      editing: false,
+      pressed: false
     }
   }
 
@@ -43,7 +45,7 @@ export default class TopRow extends React.Component<TopRowProps> {
     var buttons: JSX.Element[] = []
     var count = 1;
     for (var id of this.props.topMapping.two) {
-      var colorMapping = this.getColorMapping(count, 1)
+      var stateMapping = this.getStateMapping(count, 1)
       buttons.push(
         <BoardButton
           selectButton={this.selectButton}
@@ -52,10 +54,12 @@ export default class TopRow extends React.Component<TopRowProps> {
           y={count}
           type={BoardButtonType.Circle}
           id={[this.props.topMapping.one, id]}
-          activeColor={colorMapping.activeColor}
-          inactiveColor={colorMapping.inactiveColor}
-          flashing={colorMapping.flashing}
-          pulsing={colorMapping.pulsing}
+          activeColor={stateMapping.activeColor}
+          inactiveColor={stateMapping.inactiveColor}
+          flashing={stateMapping.flashing}
+          pulsing={stateMapping.pulsing}
+          editing={stateMapping.editing}
+          pressed={stateMapping.pressed}
         />
       )
       count++;

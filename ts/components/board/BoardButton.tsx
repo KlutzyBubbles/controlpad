@@ -19,42 +19,25 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
   inactiveColor: RGB6
   flashing: boolean
   pulsing: boolean
-}
-
-interface BoardButtonState {
-  pressed: boolean
   editing: boolean
-  color: Color
-  pressedColor: Color
+  pressed: boolean
 }
 
-export default class BoardButton extends React.Component<BoardButtonProps, BoardButtonState> {
+export default class BoardButton extends React.Component<BoardButtonProps, {}> {
   constructor (props: BoardButtonProps) {
     super(props)
-    this.state = {
-      pressed: false,
-      editing: false,
-      color: Color.fromRgb6(this.props.inactiveColor),
-      pressedColor: Color.fromRgb6(this.props.activeColor)
-    }
     if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
       var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-      launchpad?.setColor(this.props.section, this.props.x, this.props.y, this.state.color)
+      launchpad?.setColor(this.props.section, this.props.x, this.props.y, Color.fromRgb6(this.props.inactiveColor))
     }
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    if (this.state.editing) {
+    if (this.props.editing) {
       this.props.selectButton(undefined)
-      this.setState({
-        editing: false
-      })
     } else {
-      this.props.selectButton(this.props.x, this.props.y, () => this.setState({ editing: false }))
-      this.setState({
-        editing: true
-      })
+      this.props.selectButton(this.props.x, this.props.y)
     }
     // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
     //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
@@ -70,19 +53,19 @@ export default class BoardButton extends React.Component<BoardButtonProps, Board
 
   public render (): JSX.Element {
     const classes = ['board-button']
-    if (this.state.pressed) {
+    if (this.props.pressed) {
       classes.push('pressed')
     }
     if (this.props.type === BoardButtonType.Circle) {
       classes.push('circle')
     }
 
-    var buttonColor = this.state.pressed ? this.state.pressedColor.toHex() : this.state.color.toHex()
+    var buttonColor = this.props.pressed ? Color.fromRgb6(this.props.inactiveColor).toHex() : Color.fromRgb6(this.props.inactiveColor).toHex()
     if (buttonColor === '#000000')
       buttonColor = '#7D8386';
     var styles = {
       "backgroundColor": buttonColor,
-      "borderColor": this.state.editing ? "#ff00ef" : buttonColor
+      "borderColor": this.props.editing ? "#ff00ef" : buttonColor
     }
 
     return (

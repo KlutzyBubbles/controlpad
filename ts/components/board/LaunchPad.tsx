@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {
-  ColorMappings,
+  StateMappings,
   Mapping,
   Section
 } from '../../interfaces'
@@ -11,7 +11,7 @@ import SideRow from './SideRow'
 export interface LaunchPadProps extends React.ClassAttributes<LaunchPad> {
   mapping: Mapping
   selectButton: Function
-  colorMappings: ColorMappings
+  stateMappings: StateMappings
 }
 
 interface State {
@@ -22,15 +22,21 @@ export default class LaunchPad extends React.Component< LaunchPadProps, State > 
 
   constructor (props: LaunchPadProps) {
     super(props)
-    console.log('colorMapping')
-    console.log(props.colorMappings)
     this.state = {
       isOnline: false
     }
   }
 
   public render (): React.ReactNode {
-    console.log('%%% LaunchPad %%%')
+    // console.log('%%% LaunchPad %%%')
+    // console.log('colorMapping')
+    // console.log(this.props.stateMappings)
+    // console.log('has Main')
+    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Main))
+    // console.log('has Top')
+    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Top))
+    // console.log('has Side')
+    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Side))
 
     const classes = ['launchpad']
     if (!this.state.isOnline) {
@@ -45,19 +51,19 @@ export default class LaunchPad extends React.Component< LaunchPadProps, State > 
           selectButton={this.props.selectButton}
           key='top'
           topMapping={this.props.mapping.topRow}
-          topMappingColors={Object.prototype.hasOwnProperty.call(this.props.colorMappings, Section.Top) ? this.props.colorMappings[Section.Top] : []}
+          topMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Top) ? this.props.stateMappings[Section.Top] : []}
         />
         <MainBoard
           selectButton={this.props.selectButton}
           key='main'
           mainMapping={this.props.mapping.centerRows}
-          mainMappingColors={Object.prototype.hasOwnProperty.call(this.props.colorMappings, Section.Main) ? this.props.colorMappings[Section.Main] : []}
+          mainMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Main) ? this.props.stateMappings[Section.Main] : []}
         />
         <SideRow
           selectButton={this.props.selectButton}
           key='side'
           sideMapping={this.props.mapping.sideColumn}
-          sideMappingColors={Object.prototype.hasOwnProperty.call(this.props.colorMappings, Section.Side) ? this.props.colorMappings[Section.Side] : []}
+          sideMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Side) ? this.props.stateMappings[Section.Side] : []}
         />
       </div>
     )

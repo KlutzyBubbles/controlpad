@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Section } from '../../interfaces'
+import { StateMappings } from '../../interfaces'
 import { sectionToString } from '../../Utils'
 import { SelectedButton } from '../App'
 import CollapsableSection from './CollapsableSection'
@@ -13,6 +13,7 @@ export const enum BoardButtonType {
 interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
     selectedButton: SelectedButton | undefined
     changeColor: Function
+    stateMappings: StateMappings
 }
 
 export default class BoardButton extends React.Component<BoardButtonProps, {}> {
