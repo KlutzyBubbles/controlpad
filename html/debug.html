@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Controlpad</title>
+		<link href="../dist/controlpad.css" rel="stylesheet">
+		<style type="text/css">
+			html, body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				background-color: white;
+			}
+
+			.setup-widget label {
+				font-weight: bold;
+				display: block;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.0/react-dom.js"></script>
+		<script type="text/javascript">
+		window.addEventListener('load', function() {
+			Controlpad.renderApplication('container');
+		})
+		</script>
+	</body>
+</html>
