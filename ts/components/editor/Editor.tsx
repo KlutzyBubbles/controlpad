@@ -21,7 +21,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
     public render(): JSX.Element {
         var classes = ['options']
         if (this.props.selectedButton === undefined)
-            classes.push('hidden')
+            return (<React.Fragment></React.Fragment>)
         return (
             <div className={classes.join(' ')}>
                 <div>
@@ -51,6 +51,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
                         <ColorEditor
                             changeColor={this.props.changeColor}
                             selectedButton={this.props.selectedButton}
+                            stateMappings={this.props.stateMappings}
                         />
                 </CollapsableSection>
                 <CollapsableSection

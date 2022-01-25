@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Color, RGB6 } from '../../Color';
-import { Section } from '../../interfaces'
+import { PresetColor, Section } from '../../interfaces'
 import { padManagerInstance } from '../../utils/PadManager';
 
 export const enum BoardButtonType {
@@ -26,10 +26,10 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
 export default class BoardButton extends React.Component<BoardButtonProps, {}> {
   constructor (props: BoardButtonProps) {
     super(props)
-    if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-      var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-      launchpad?.setColor(this.props.section, this.props.x, this.props.y, Color.fromRgb6(this.props.inactiveColor))
-    }
+    // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
+    //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+    //   launchpad?.setColor(this.props.section, this.props.x, this.props.y, Color.fromRgb6(this.props.inactiveColor))
+    // }
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -39,6 +39,10 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
     } else {
       this.props.selectButton(this.props.x, this.props.y)
     }
+    // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
+    //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+    //   launchpad?.startFlash(this.props.section, this.props.x, this.props.y, PresetColor.White)
+    // }
     // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
     //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
     //   var color = Color.random()
@@ -60,12 +64,18 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
       classes.push('circle')
     }
 
-    var buttonColor = this.props.pressed ? Color.fromRgb6(this.props.inactiveColor).toHex() : Color.fromRgb6(this.props.inactiveColor).toHex()
+    var buttonColor = this.props.pressed ? Color.fromRgb6(this.props.activeColor).toHex() : Color.fromRgb6(this.props.inactiveColor).toHex()
+    if (this.props.x === 8 && this.props.y === 1 && this.props.section === Section.Main) {
+      console.log(this.props.pressed)
+      console.log(this.props.inactiveColor)
+      console.log(this.props.activeColor)
+      console.log(buttonColor)
+    }
     if (buttonColor === '#000000')
       buttonColor = '#7D8386';
     var styles = {
       "backgroundColor": buttonColor,
-      "borderColor": this.props.editing ? "#ff00ef" : buttonColor
+      "borderColor": this.props.pressed ? "#fff" : this.props.editing ? "#ff00ef" : buttonColor
     }
 
     return (

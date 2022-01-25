@@ -38,9 +38,9 @@ export class Color {
     toHex(base = 64) {
         var factor = 256 / base
         return '#' +
-            this.componentToHex(Math.floor(this.red * factor)) +
-            this.componentToHex(Math.floor(this.green * factor)) +
-            this.componentToHex(Math.floor(this.blue * factor));
+            this.componentToHex(Math.round(this.red * factor)) +
+            this.componentToHex(Math.round(this.green * factor)) +
+            this.componentToHex(Math.round(this.blue * factor));
     }
 
     toRgb() {
@@ -56,6 +56,15 @@ export class Color {
             r: this.red,
             g: this.green,
             b: this.blue
+        };
+    }
+
+    toRgb8(base = 64) {
+        var factor = 256 / base
+        return {
+            r: Math.round(this.red * factor),
+            g: Math.round(this.green * factor),
+            b: Math.round(this.blue * factor)
         };
     }
 
@@ -78,6 +87,10 @@ export class Color {
     }
 
     static toRgb6(rgba: RGBA) {
+        return Color.fromRgba(rgba).toRgb6()
+    }
+
+    static toRgb8(rgba: RGBA) {
         return Color.fromRgba(rgba).toRgb6()
     }
 

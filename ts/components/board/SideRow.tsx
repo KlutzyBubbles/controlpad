@@ -14,6 +14,7 @@ interface SideRowProps extends React.ClassAttributes<SideRow> {
 export default class SideRow extends React.Component<SideRowProps> {
   public constructor (props: SideRowProps) {
     super(props)
+    this.selectButton = this.selectButton.bind(this);
   }
 
   selectButton(x?: number, y?: number) {
@@ -43,15 +44,15 @@ export default class SideRow extends React.Component<SideRowProps> {
 
   public render (): JSX.Element {
     var buttons: JSX.Element[] = []
-    var count = 1;
+    var count = 8;
     for (var id of this.props.sideMapping.two) {
       var stateMapping = this.getStateMapping(1, count)
       buttons.push(
         <BoardButton
           selectButton={this.selectButton}
           section={Section.Side}
-          x={count}
-          y={1}
+          x={1}
+          y={count}
           type={BoardButtonType.Circle}
           id={[this.props.sideMapping.one, id]}
           activeColor={stateMapping.activeColor}
@@ -62,7 +63,7 @@ export default class SideRow extends React.Component<SideRowProps> {
           pressed={stateMapping.pressed}
         />
       )
-      count++;
+      count--;
     }
     return <div className={"side-row"}>{buttons}</div>
   }

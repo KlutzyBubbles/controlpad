@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev": "webpack --watch -d",
+    "dev": "webpack --watch",
     "test": "node test.js",
     "ts-test": "ts-node test.ts",
     "start": "electron main.js",
@@ -29,6 +29,7 @@
     "react": "^16.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^16.2.0",
+    "robotjs": "^0.6.0",
     "ts-loader": "^9.2.4",
     "ts-standard": "^10.0.0",
     "typescript": "^4.3.5",

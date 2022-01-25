@@ -3,24 +3,76 @@ import { Color } from "../Color";
 import {
     LaunchpadTypes
 } from "../constants";
-import { Section } from "../interfaces";
+import { PresetColor, Section } from "../interfaces";
 import mapping from '../../mappings/mk2.json'
+import { EventEmitter } from "events";
 
-export default class Launchpad {
+export default class Launchpad extends EventEmitter {
     name: string;
     input: Input;
     output: Output;
     type: LaunchpadTypes = LaunchpadTypes.BLANK;
 
     constructor(name: string, input: Input, output: Output) {
+        super();
         this.name = name;
         this.input = input;
         this.output = output;
+        this.input.addListener('midimessage', this.midiMessage)
+    }
+
+    midiMessage = (event) => {
+        var data = event.message.data;
+        if (data === undefined || data === null || data.length !== 3) {
+            console.error(`Invalid data received from ${this.name}`);
+            return;
+        }
+        console.log(`midimessage ${data}`)
+        var codes = this.getMessageCodes(data[0], data[1])
+        if (codes === undefined) {
+            console.error(`Invalid data received from ${this.name}, Data: ${data}, Codes: ${codes}`);
+            return;
+        }
+        if (data[2] === mapping.pressedState[0]) {
+            this.emit('released', codes)
+        } else if (data[2] === mapping.pressedState[1]) {
+            this.emit('pressed', codes)
+        } else {
+            console.error(`Invalid pressed state received from ${this.name}, expected ${mapping.pressedState}, received ${data[2]}`);
+        }
+    }
+
+    getMessageCodes(item1: number, item2: number): number[] | undefined {
+        // console.log(`getMessageCodes(${item1}, ${item2})`)
+        for (var sectionName in mapping.gridMappings) {
+            var currentSection = -1
+            for (var item of mapping.gridMappings[sectionName]) {
+                if (item.x === 0 && item.y === 0)
+                    currentSection = item.number
+                if (currentSection === item1 && item.number === item2)
+                    return [parseInt(sectionName), item.x, item.y]
+            }
+        }
+        return undefined
+    }
+
+    getButtonCombo(section: Section, x: number, y: number): (number | undefined)[] {
+        return [this.getSectionNumber(section), this.getButtonNumber(section, x, y)]
     }
 
     getButtonNumber(section: Section, x: number, y: number): number | undefined {
+        // console.log(`getButtonNumber(${section}, ${x}, ${y})`)
+        // console.log(mapping.gridMappings[section])
         for (var item of mapping.gridMappings[section]) {
             if (item.x === x && item.y === y)
+                return item.number
+        }
+        return undefined
+    }
+
+    getSectionNumber(section: Section): number | undefined {
+        for (var item of mapping.gridMappings[section]) {
+            if (item.x === 0 && item.y === 0)
                 return item.number
         }
         return undefined
@@ -33,13 +85,15 @@ export default class Launchpad {
     setAll(color: Color) {
         for (var section in mapping.gridMappings) {
             for (var item of mapping.gridMappings[section]) {
-                this.output.sendSysex(
-                    [],
-                    mapping.sysExSequence.concat([
-                        0x0b,
-                        item.number
-                    ].concat(color.toRgbArray()))
-                );
+                if (item.x !== 0 || item.y !== 0) {
+                    this.output.sendSysex(
+                        [],
+                        mapping.sysExSequence.concat([
+                            0x0b,
+                            item.number
+                        ].concat(color.toRgbArray()))
+                    );
+                }
             }
         }
     }
@@ -55,6 +109,23 @@ export default class Launchpad {
                     0x0b,
                     buttonNumber
                 ].concat(color.toRgbArray()))
+            );
+        }
+    }
+
+    startFlash(section: Section, x: number, y: number, color: PresetColor) {
+        var buttonNumber = this.getButtonNumber(section, x, y)
+        if (buttonNumber === undefined)
+            console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
+        else {
+            this.output.sendSysex(
+                [],
+                mapping.sysExSequence.concat([
+                    0x23,
+                    0x00,
+                    buttonNumber,
+                    color
+                ])
             );
         }
     }

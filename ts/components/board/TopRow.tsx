@@ -14,6 +14,7 @@ interface TopRowProps extends React.ClassAttributes<TopRow> {
 export default class TopRow extends React.Component<TopRowProps> {
   public constructor (props: TopRowProps) {
     super(props)
+    this.selectButton = this.selectButton.bind(this);
   }
 
   selectButton(x?: number, y?: number) {
@@ -50,8 +51,8 @@ export default class TopRow extends React.Component<TopRowProps> {
         <BoardButton
           selectButton={this.selectButton}
           section={Section.Top}
-          x={1}
-          y={count}
+          x={count}
+          y={1}
           type={BoardButtonType.Circle}
           id={[this.props.topMapping.one, id]}
           activeColor={stateMapping.activeColor}
