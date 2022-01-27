@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { SketchPicker, ColorResult } from 'react-color';
-import { Color, RGB } from '../../Color';
-import { StateMappings } from '../../interfaces';
+import { Color, RGB } from '../../../common/Color';
+import { StateMappings } from '../../../common/interfaces';
 import { SelectedButton } from '../App';
 import { Color as MUIColor, ColorPicker, createColor, ColorFormat } from "mui-color";
 import Typography from '@mui/material/Typography';

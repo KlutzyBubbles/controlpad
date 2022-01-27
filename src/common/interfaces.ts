@@ -1,4 +1,4 @@
-import { RGB6 } from "./Color"
+import { RGB } from "./Color"
 
 export interface AnyNumberArray {
   [key: string]: number[]

@@ -47,7 +47,7 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('file-export', async () => {
-    var result = await dialog.showSaveDialog(mainWindow, {
+    const result = await dialog.showSaveDialog(mainWindow, {
       title: 'Save config',
       filters: [
         {
@@ -69,7 +69,7 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('file-import', async () => {
-    var result = await dialog.showOpenDialog(mainWindow, {
+    const result = await dialog.showOpenDialog(mainWindow, {
       title: 'Load config',
       filters: [
         {
@@ -107,7 +107,7 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('app-open-about', async () => {
-    var message = `
+    const message = `
     'ControlPad' by KlutzyBubbles
 
     ControlPad Version: ${process.env['npm_package_version']}

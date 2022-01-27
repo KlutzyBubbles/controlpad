@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StateMappings } from '../../interfaces'
+import { StateMappings } from '../../../common/interfaces'
 import { sectionToString } from '../../Utils'
 import { SelectedButton } from '../App'
 import CollapsableSection from './CollapsableSection'

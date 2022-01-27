@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Color, ColorPicker, createColor } from "mui-color";
-import { RGB } from '../../Color'
+import { RGB } from '../../../common/Color'
 
 interface ColorEditorProps {
     onChange: Function

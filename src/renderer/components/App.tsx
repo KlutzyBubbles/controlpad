@@ -3,16 +3,17 @@ import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
 import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, AnyObject } from '../interfaces'
+import { StateMappings, StateMapping, AnyObject } from '../../common/interfaces'
 import { Section, PresetColor } from '../Constants'
 import Editor from './editor/Editor'
-import { Color, RGB } from '../Color'
+import { Color, RGB } from '../../common/Color'
 import { padManagerInstance } from '../utils/PadManager'
 import equal from 'fast-deep-equal'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
+import context from '../preload/configContextApi';
 // import { ipcRenderer } from 'electron';
 // import configStore from '../utils/ConfigStore'
 import { theme } from './Theme'
@@ -60,6 +61,11 @@ export default class App extends React.Component<{}, AppState> {
           var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
           launchpad?.setColor(location[0], location[1], location[2], this.getColor(location[0], location[1], location[2], false))
         }
+      })
+    })
+    context.loadMappings().then((mappings: StateMappings) => {
+      this.setState({
+        stateMappings: mappings
       })
     })
   }
@@ -147,9 +153,12 @@ export default class App extends React.Component<{}, AppState> {
       mappings[section][index] = newObject
     }
     if (changed) {
-      return {
+      const result = {
         stateMappings: mappings
       }
+      context.saveMappings(result)
+      // ipcRenderer.invoke('mappings-save', result)
+      return result
     }
     return {}
   }

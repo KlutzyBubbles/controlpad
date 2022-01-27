@@ -1,7 +1,7 @@
 import { Input, Output } from "webmidi";
-import { Color } from "../Color";
+import { Color } from "../../common/Color";
 import { PresetColor, Section, LaunchpadTypes } from "../Constants";
-import { Mapping } from '../interfaces'
+import { Mapping } from '../../common/interfaces'
 import mappingJson from '../../mappings/mk2.json'
 import { EventEmitter } from "events";
 

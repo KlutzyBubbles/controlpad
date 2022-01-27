@@ -2,7 +2,7 @@ import * as React from 'react'
 import {
   StateMapping,
   RowMapping
-} from '../../interfaces'
+} from '../../../common/interfaces'
 import { Section } from '../../Constants'
 import BoardButton, { BoardButtonType } from './BoardButton'
 

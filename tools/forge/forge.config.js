@@ -32,8 +32,8 @@ module.exports = {
       '@electron-forge/plugin-webpack',
       {
         devContentSecurityPolicy: '',
-        port: 3000, // Webpack Dev Server port
-        loggerPort: 9000,
+        port: 30001, // Webpack Dev Server port
+        loggerPort: 9005,
         mainConfig: path.join(rootDir, 'tools/webpack/webpack.main.js'),
         renderer: {
           config: path.join(rootDir, 'tools/webpack/webpack.renderer.js'),

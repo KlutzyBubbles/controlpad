@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Color, RGB } from '../../Color';
+import { Color, RGB } from '../../../common/Color';
 import { PresetColor, Section } from '../../Constants'
 import { padManagerInstance } from '../../utils/PadManager';
 
