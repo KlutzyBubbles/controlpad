@@ -65,7 +65,7 @@ export default class App extends React.Component<Record<string, never>, AppState
     })
     context.loadMappings().then((mappings: StateMappings) => {
       this.setState({
-        stateMappings: mappings
+        stateMappings: mappings || {}
       })
     })
   }
