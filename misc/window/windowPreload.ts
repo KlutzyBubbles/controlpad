@@ -1,6 +1,4 @@
 import { contextBridge } from 'electron';
-import titlebarContext from './titlebarContext';
+import electronWindow from './ElectronWindow';
 
-contextBridge.exposeInMainWorld('electron_window', {
-  titlebar: titlebarContext,
-});
+contextBridge.exposeInMainWorld('electron_window', electronWindow);
