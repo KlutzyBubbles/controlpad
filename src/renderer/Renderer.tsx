@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WindowFrame from '@misc/window/components/WindowFrame';
+import WindowFrame from '@src/window/components/WindowFrame';
 import App from './components/App';
 
 console.log('[CP] : Renderer execution started');

@@ -7,5 +7,4 @@ module.exports = createWebpackAliases({
   '@main': 'src/main',
   '@renderer': 'src/renderer',
   '@src': 'src',
-  '@misc': 'misc',
 });

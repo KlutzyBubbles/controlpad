@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
-import { registerTitlebarIpc } from '@misc/window/titlebarIPC';
-import { registerConfigIPC } from './ConfigStore';
+import { registerTitlebarIpc } from '@main/ipc/TitlebarIPC';
+import registerConfigIPC from './ipc/ConfigIPC';
 
 declare const APP_WINDOW_WEBPACK_ENTRY: string;
 declare const APP_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
