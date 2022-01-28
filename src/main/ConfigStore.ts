@@ -1,6 +1,6 @@
 import Store from 'electron-store'
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-import { StateMappings } from '../common/interfaces'
+import { StateMappings } from '../common/Interfaces'
 
 interface ConfigStore {
     stateMappings: StateMappings

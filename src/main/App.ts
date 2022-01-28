@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { createAppWindow } from './appWindow';
+import { createAppWindow } from './AppWindow';
 // import Store from 'electron-store'
 // 
 // Store.initRenderer()

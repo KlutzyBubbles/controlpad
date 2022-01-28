@@ -3,7 +3,7 @@ import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
 import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, StateMappingOptional } from '../../common/interfaces'
+import { StateMappings, StateMapping, StateMappingOptional } from '../../common/Interfaces'
 import { Section, PresetColor } from '../Constants'
 import Editor from './editor/Editor'
 import { Color, RGB } from '../../common/Color'
@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import context from '../preload/configContextApi';
+import context from '../preload/ConfigContextApi';
 // import { ipcRenderer } from 'electron';
 // import configStore from '../utils/ConfigStore'
 import { theme } from './Theme'

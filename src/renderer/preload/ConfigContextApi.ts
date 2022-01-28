@@ -1,4 +1,4 @@
-import { ConfigContextApi } from './configContext';
+import { ConfigContextApi } from './ConfigContext';
 import electronConfig from './ElectronConfig'
 
 type AddedProps = {

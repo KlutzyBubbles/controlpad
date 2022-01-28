@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StateMappings } from '../../../common/interfaces'
+import { StateMappings } from '../../../common/Interfaces'
 import { sectionToString } from '../../Utils'
 import { SelectedButton } from '../App'
 import ColorEditor from './ColorEditor'

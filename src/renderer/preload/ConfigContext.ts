@@ -1,4 +1,4 @@
-import { StateMappings } from '@common/interfaces';
+import { StateMappings } from '@common/Interfaces';
 import { ipcRenderer } from 'electron';
 
 type EventItem = {

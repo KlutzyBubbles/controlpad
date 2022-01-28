@@ -1,4 +1,4 @@
-import configContext from './configContext';
+import configContext from './ConfigContext';
 
 const electronConfig = {
   config: configContext,
