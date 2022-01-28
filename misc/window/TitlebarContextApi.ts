@@ -1,4 +1,4 @@
-import { TitlebarContextApi } from './titlebarContext';
+import { TitlebarContextApi } from './TitlebarContext';
 import electronWindow from './ElectronWindow'
 
 type AddedProps = {

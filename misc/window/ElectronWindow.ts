@@ -1,4 +1,4 @@
-import titlebarContext from './titlebarContext';
+import titlebarContext from './TitlebarContext';
 
 const electronWindow = {
   titlebar: titlebarContext,
