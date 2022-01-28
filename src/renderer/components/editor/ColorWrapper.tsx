@@ -3,7 +3,7 @@ import { Color, ColorPicker, createColor } from "mui-color";
 import { RGB } from '../../../common/Color'
 
 interface ColorEditorProps {
-    onChange: Function
+    onChange: (rgb: RGB) => void
 }
 
 interface ColorEditorState {

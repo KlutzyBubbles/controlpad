@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import { ipcMain } from 'electron';
+import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { StateMappings } from '../common/interfaces'
 
 interface ConfigStore {
@@ -10,7 +10,7 @@ const configStore = new Store<ConfigStore>()
 export default configStore
 
 export const registerConfigIPC = () => {
-  ipcMain.handle('mappings-save', (event: any, data: any) => {
+  ipcMain.handle('mappings-save', (event: IpcMainInvokeEvent, data: ConfigStore) => {
     console.log('mappings-ssave', data.stateMappings)
     console.log(data)
     configStore.set('stateMappings', data.stateMappings as StateMappings)

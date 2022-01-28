@@ -29,7 +29,7 @@ export class Color {
     }
 
     componentToHex(component: number) {
-        var hex = component.toString(16);
+        const hex = component.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
 

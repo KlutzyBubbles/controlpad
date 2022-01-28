@@ -3,7 +3,7 @@ import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
 import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, AnyObject } from '../../common/interfaces'
+import { StateMappings, StateMapping, StateMappingOptional } from '../../common/interfaces'
 import { Section, PresetColor } from '../Constants'
 import Editor from './editor/Editor'
 import { Color, RGB } from '../../common/Color'
@@ -30,9 +30,9 @@ interface AppState {
   lastColorUpdate: number
 }
 
-export default class App extends React.Component<{}, AppState> {
+export default class App extends React.Component<Record<string, never>, AppState> {
 
-  constructor(props: any) {
+  constructor(props: Record<string, never>) {
     super(props)
     this.state = {
       selected: undefined,
@@ -42,7 +42,7 @@ export default class App extends React.Component<{}, AppState> {
     }
     padManagerInstance.on('connected', (name) => {
       // console.log(`connected ${name}`)
-      var launchpad = padManagerInstance.getLaunchpad(name)
+      const launchpad = padManagerInstance.getLaunchpad(name)
       if (launchpad === undefined)
         return;
       // console.log('Ready for listeners')
@@ -50,7 +50,7 @@ export default class App extends React.Component<{}, AppState> {
         // console.log(`pressed ${location}`)
         this.setState(this.changeState(this.state, location[0], location[1], location[2], { pressed: true }) as AppState)
         if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-          var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+          const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
           launchpad?.setColor(location[0], location[1], location[2], this.getColor(location[0], location[1], location[2], true))
         }
       })
@@ -58,7 +58,7 @@ export default class App extends React.Component<{}, AppState> {
         // console.log(`released ${location}`)
         this.setState(this.changeState(this.state, location[0], location[1], location[2], { pressed: false }) as AppState)
         if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-          var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+          const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
           launchpad?.setColor(location[0], location[1], location[2], this.getColor(location[0], location[1], location[2], false))
         }
       })
@@ -74,13 +74,13 @@ export default class App extends React.Component<{}, AppState> {
     console.log('refreshBoardState')
     if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
       // console.log('padManagerInstance not undefined')
-      var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+      const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
       if (launchpad !== undefined) {
         // console.log('launchpad not undefined')
-        for (var sectionName in this.state.stateMappings) {
+        for (const sectionName in this.state.stateMappings) {
           console.log(`refreshBoardState 0 ${sectionName}`)
-          var section = parseInt(sectionName)
-          for (var state of this.state.stateMappings[sectionName]) {
+          const section = parseInt(sectionName)
+          for (const state of this.state.stateMappings[sectionName]) {
             console.log(`refreshBoardState 1 ${section}`)
             launchpad.setColor(section, state.x, state.y, Color.fromRgba(state.pressed ? state.activeColor : state.inactiveColor))
             if (state.editing) {
@@ -94,11 +94,12 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   getColor(section: Section, x: number, y: number, active: boolean): Color {
-    if (!Object.prototype.hasOwnProperty.call(this.state.stateMappings, section))
-      this.state.stateMappings[section] = []
-    var index = -1;
-    for (var i = 0; i < this.state.stateMappings[section].length; i++) {
-      var item = this.state.stateMappings[section][i]
+    let stateMappingsSection: StateMapping[] = []
+    if (Object.prototype.hasOwnProperty.call(this.state.stateMappings, section))
+      stateMappingsSection = this.state.stateMappings[section]
+    let index = -1;
+    for (let i = 0; i < stateMappingsSection.length; i++) {
+      const item = stateMappingsSection[i]
       if (item.x === x && item.y === y) {
         index = i;
         break;
@@ -108,8 +109,8 @@ export default class App extends React.Component<{}, AppState> {
       return Color.fromRgba({ r: 0, g: 0, b: 0 })
     } else {
       if (active)
-        return Color.fromRgba(this.state.stateMappings[section][index].activeColor)
-      return Color.fromRgba(this.state.stateMappings[section][index].inactiveColor)
+        return Color.fromRgba(stateMappingsSection[index].activeColor)
+      return Color.fromRgba(stateMappingsSection[index].inactiveColor)
     }
   }
 
@@ -117,18 +118,21 @@ export default class App extends React.Component<{}, AppState> {
       return typeof o[name];
   }
 
-  changeState = (state: AppState, section: Section, x: number, y: number, newState: any): any => {
+  //Partial<AppState>
+  //Pick<AppState, keyof AppState>
+  //Omit<AppState, keyof AppState>
+  changeState = (state: AppState, section: Section, x: number, y: number, newState: StateMappingOptional): Omit<AppState, keyof AppState> => {
     if (!Object.prototype.hasOwnProperty.call(state.stateMappings, section))
       state.stateMappings[section] = []
-    var index = -1;
-    for (var i = 0; i < state.stateMappings[section].length; i++) {
-      var item = state.stateMappings[section][i]
+    let index = -1;
+    for (let i = 0; i < state.stateMappings[section].length; i++) {
+      const item = state.stateMappings[section][i]
       if (item.x === x && item.y === y) {
         index = i;
         break;
       }
     }
-    var oldObject: StateMapping = {
+    let oldObject: StateMapping = {
       x: x,
       y: y,
       activeColor: { r: 0, g: 0, b: 0 },
@@ -139,9 +143,9 @@ export default class App extends React.Component<{}, AppState> {
       pressed: false,
       name: ''
     }
-    var newObject: StateMapping = oldObject
-    var changed = false
-    var mappings = state.stateMappings
+    let newObject: StateMapping = oldObject
+    let changed = false
+    const mappings = state.stateMappings
     if (index === -1) {
       newObject = {...oldObject, ...newState}
       changed = !equal(oldObject, newObject)
@@ -163,18 +167,19 @@ export default class App extends React.Component<{}, AppState> {
     return {}
   }
 
-  changeAndSetState = (section: Section, x: number, y: number, newState: any) => {
-    this.setState({...this.changeState(this.state, section, x, y, {
-      editing: true
-    })})
+  changeAndSetState = (section: Section, x: number, y: number, newState: StateMappingOptional) => {
+    const changedState = this.changeState(this.state, section, x, y, newState)
+    if (changedState === {})
+      return
+    this.setState({...changedState})
   }
 
-  selectButton = (section: Section | undefined, x?: number, y?: number) => {
+  selectButton = (section?: Section, x?: number, y?: number) => {
     x = x || -1
     y = y || -1
-    var mappings = this.state.stateMappings;
-    for (var sectionMapping in mappings) {
-      for (var item of mappings[sectionMapping]) {
+    const mappings = this.state.stateMappings;
+    for (const sectionMapping in mappings) {
+      for (const item of mappings[sectionMapping]) {
           item.editing = false
       }
     }
@@ -203,8 +208,8 @@ export default class App extends React.Component<{}, AppState> {
     // console.log('changeColor')
     if (active == false && padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
       console.log('actually setting color')
-      var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-      var now = Date.now()
+      const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
+      const now = Date.now()
       if (now - this.state.lastColorUpdate > 100) {
         console.log('greater than')
         console.log(`changeColor 1 ${section}`)
@@ -214,7 +219,7 @@ export default class App extends React.Component<{}, AppState> {
         })
       }
     }
-    var changes: any = {}
+    const changes: StateMappingOptional = {}
     if (active)
       changes.activeColor = color
     else

@@ -5,7 +5,7 @@ import { Mapping } from '../../common/interfaces'
 import mappingJson from '../../mappings/mk2.json'
 import { EventEmitter } from "events";
 
-let mapping: Mapping = <Mapping> mappingJson;
+const mapping: Mapping = <Mapping> mappingJson;
 
 export default class Launchpad extends EventEmitter {
     name: string;
@@ -22,13 +22,13 @@ export default class Launchpad extends EventEmitter {
     }
 
     midiMessage = (event: any) => {
-        var data = event.message.data;
+        const data = event.message.data;
         if (data === undefined || data === null || data.length !== 3) {
             console.error(`Invalid data received from ${this.name}`);
             return;
         }
         // console.log(`midimessage ${data}`)
-        var codes = this.getMessageCodes(data[0], data[1])
+        const codes = this.getMessageCodes(data[0], data[1])
         if (codes === undefined) {
             console.error(`Invalid data received from ${this.name}, Data: ${data}, Codes: ${codes}`);
             return;
@@ -44,9 +44,9 @@ export default class Launchpad extends EventEmitter {
 
     getMessageCodes(item1: number, item2: number): number[] | undefined {
         // console.log(`getMessageCodes(${item1}, ${item2})`)
-        for (var sectionName in mapping.gridMappings) {
-            var currentSection = -1
-            for (var item of mapping.gridMappings[sectionName]) {
+        for (const sectionName in mapping.gridMappings) {
+            let currentSection = -1
+            for (const item of mapping.gridMappings[sectionName]) {
                 if (item.x === 0 && item.y === 0)
                     currentSection = item.number
                 if (currentSection === item1 && item.number === item2)
@@ -66,7 +66,7 @@ export default class Launchpad extends EventEmitter {
         console.log('getButtonNumber')
         console.log(mapping.gridMappings[section])
         console.log(section)
-        for (var item of mapping.gridMappings[section]) {
+        for (const item of mapping.gridMappings[section]) {
             if (item.x === x && item.y === y)
                 return item.number
         }
@@ -74,7 +74,7 @@ export default class Launchpad extends EventEmitter {
     }
 
     getSectionNumber(section: Section): number | undefined {
-        for (var item of mapping.gridMappings[section]) {
+        for (const item of mapping.gridMappings[section]) {
             if (item.x === 0 && item.y === 0)
                 return item.number
         }
@@ -86,8 +86,8 @@ export default class Launchpad extends EventEmitter {
     }
 
     setAll(color: Color) {
-        for (var section in mapping.gridMappings) {
-            for (var item of mapping.gridMappings[section]) {
+        for (const section in mapping.gridMappings) {
+            for (const item of mapping.gridMappings[section]) {
                 if (item.x !== 0 || item.y !== 0) {
                     this.output.sendSysex(
                         [],
@@ -103,7 +103,7 @@ export default class Launchpad extends EventEmitter {
 
     setColor(section: Section, x: number, y: number, color: Color) {
         console.log('setColor')
-        var buttonNumber = this.getButtonNumber(section, x, y)
+        const buttonNumber = this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
         else {
@@ -119,7 +119,7 @@ export default class Launchpad extends EventEmitter {
 
     startFlash(section: Section, x: number, y: number, color: PresetColor) {
         console.log('startFlash')
-        var buttonNumber = this.getButtonNumber(section, x, y)
+        const buttonNumber = this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
         else {
@@ -136,7 +136,7 @@ export default class Launchpad extends EventEmitter {
     }
 
     getType(): Promise<LaunchpadTypes> {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             const listenerTimer = setTimeout(() => {
                 // console.log("removing");
                 this.input.removeListener("sysex", () => {
@@ -251,7 +251,7 @@ export default class Launchpad extends EventEmitter {
                     ) &&
                     e.data[5] === 0x70
                 ) {
-                    let versionNum = parseInt(
+                    const versionNum = parseInt(
                         e.data.slice(13, 16).reduce((s: any, el: any) => s + el, "")
                     );
 
@@ -275,13 +275,14 @@ export default class Launchpad extends EventEmitter {
 
         fwArray.forEach((byte) => {
             if (byte === 0xf0) {
+              // Ignore
             } else if (byte === 0xf7) {
                 messages.push(currentMessage);
                 currentMessage = [];
             } else currentMessage.push(byte);
         });
 
-        for (let message of messages) {
+        for (const message of messages) {
             await new Promise<void>((resolve) =>
                 setTimeout(() => {
                     this.output.sendSysex([], message);

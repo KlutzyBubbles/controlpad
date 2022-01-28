@@ -37,7 +37,7 @@ export default class Settings extends React.Component<SettingsProps> {
             <input
               type='checkbox'
               checked={this.props.isLogVisible}
-              onChange={(e) => this.props.onToggleLog()}
+              onChange={() => this.props.onToggleLog()}
             />
             <span>Show Event Log</span>
           </label>

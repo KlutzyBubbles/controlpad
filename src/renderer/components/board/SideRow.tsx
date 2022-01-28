@@ -9,7 +9,7 @@ import BoardButton, { BoardButtonType } from './BoardButton'
 interface SideRowProps extends React.ClassAttributes<SideRow> {
   sideMapping: RowMapping
   sideMappingStates: StateMapping[]
-  selectButton: Function
+  selectButton: (section?: Section, x?: number, y?: number) => void
 }
 
 export default class SideRow extends React.Component<SideRowProps> {
@@ -27,7 +27,7 @@ export default class SideRow extends React.Component<SideRowProps> {
   }
 
   getStateMapping(x: number, y: number): StateMapping {
-    for (var item of this.props.sideMappingStates) {
+    for (const item of this.props.sideMappingStates) {
       if (item.x === x && item.y === y)
         return item
     }
@@ -45,10 +45,10 @@ export default class SideRow extends React.Component<SideRowProps> {
   }
 
   public render (): JSX.Element {
-    var buttons: JSX.Element[] = []
-    var count = 8;
-    for (var id of this.props.sideMapping.two) {
-      var stateMapping = this.getStateMapping(1, count)
+    const buttons: JSX.Element[] = []
+    let count = 8;
+    for (const id of this.props.sideMapping.two) {
+      const stateMapping = this.getStateMapping(1, count)
       buttons.push(
         <BoardButton
           selectButton={this.selectButton}

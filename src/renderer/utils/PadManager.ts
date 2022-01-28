@@ -8,7 +8,7 @@ export class PadManager extends EventEmitter {
     selectedDevice: string | undefined
     online: boolean
 
-    constructor(callback?: Function) {
+    constructor(callback?: (error?: Error | string) => void) {
         super()
         this.connectedDevices = []
         this.selectedDevice = undefined
@@ -16,13 +16,13 @@ export class PadManager extends EventEmitter {
 
         WebMidi.disable().then(() => {
             WebMidi.enable({
-                callback: (error: any) => this.midiInit(error, callback),
+                callback: (error?: Error | string) => this.midiInit(error, callback),
                 sysex: true
             })
         })
     }
 
-    midiInit(error: any, callback?: Function) {
+    midiInit(error?: Error | string, callback?: (error?: Error | string) => void) {
         if (error) {
             console.error('Error initiating WebMidi')
             console.error(error)
@@ -46,7 +46,7 @@ export class PadManager extends EventEmitter {
     }
 
     hasLaunchpad(name: string) {
-        for (var launchpad of this.connectedDevices) {
+        for (const launchpad of this.connectedDevices) {
             if (launchpad.name == name) {
                 return true
             }
@@ -55,7 +55,7 @@ export class PadManager extends EventEmitter {
     }
 
     getLaunchpad(name: string): Launchpad | undefined {
-        for (var launchpad of this.connectedDevices) {
+        for (const launchpad of this.connectedDevices) {
             if (launchpad.name == name) {
                 return launchpad
             }
@@ -69,9 +69,9 @@ export class PadManager extends EventEmitter {
             return
         if (this.selectedDevice == undefined)
             this.selectedDevice = name
-        var input = WebMidi.getInputByName(name)
-        var output = WebMidi.getOutputByName(name)
-        var launchpad = new Launchpad(name, input, output)
+        const input = WebMidi.getInputByName(name)
+        const output = WebMidi.getOutputByName(name)
+        const launchpad = new Launchpad(name, input, output)
         launchpad.clearAll()
         this.connectedDevices.push(launchpad)
         this.emit('connected', name)
@@ -83,8 +83,8 @@ export class PadManager extends EventEmitter {
         if (this.selectedDevice == name)
             this.selectedDevice = undefined
         this.emit('disconnected', name)
-        var index = -1;
-        for (var i = 0; i < this.connectedDevices.length; i++) {
+        let index = -1;
+        for (let i = 0; i < this.connectedDevices.length; i++) {
             if (this.connectedDevices[i].name == name) {
                 index = i;
                 break;
@@ -99,8 +99,8 @@ export class PadManager extends EventEmitter {
     portsMatch = (input: string, output: string) => this.portNeutralize(input) === this.portNeutralize(output);
 
     scan(): void {
-        for (let input of WebMidi.inputs) {
-            for (let output of WebMidi.outputs) {
+        for (const input of WebMidi.inputs) {
+            for (const output of WebMidi.outputs) {
                 if (this.portsMatch(input.name, output.name)) {
                     // console.log('output.name')
                     // console.log(output.name)

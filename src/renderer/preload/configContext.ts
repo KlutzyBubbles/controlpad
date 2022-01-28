@@ -1,7 +1,12 @@
+import { StateMappings } from '@common/interfaces';
 import { ipcRenderer } from 'electron';
 
+type EventItem = {
+  stateMappings: StateMappings;
+}
+
 const configContext = {
-  saveMappings(event: any) {
+  saveMappings(event: EventItem) {
     console.log('savemappings', event)
     ipcRenderer.invoke('mappings-save', event);
   },

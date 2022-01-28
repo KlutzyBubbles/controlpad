@@ -1,4 +1,4 @@
 import '@misc/window/WindowPreload';
-import '@preload/configPreload';
+import './preload/configPreload';
 
 console.log('[CP] : Preload execution started');

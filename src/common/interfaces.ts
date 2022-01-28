@@ -8,10 +8,6 @@ export interface AnyKey {
   [key: string]: AnyNumberArray
 }
 
-export interface AnyObject {
-  [key: string]: any
-}
-
 export interface StateMapping {
   x: number
   y: number
@@ -22,6 +18,18 @@ export interface StateMapping {
   editing: boolean
   pressed: boolean
   name: string
+}
+
+export interface StateMappingOptional {
+  x?: number
+  y?: number
+  activeColor?: RGB
+  inactiveColor?: RGB
+  pulsing?: boolean
+  flashing?: boolean
+  editing?: boolean
+  pressed?: boolean
+  name?: string
 }
 
 export interface StateMappings {

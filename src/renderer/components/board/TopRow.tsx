@@ -9,7 +9,7 @@ import BoardButton, { BoardButtonType } from './BoardButton'
 interface TopRowProps extends React.ClassAttributes<TopRow> {
   topMapping: RowMapping
   topMappingStates: StateMapping[]
-  selectButton: Function
+  selectButton: (section?: Section, x?: number, y?: number) => void
 }
 
 export default class TopRow extends React.Component<TopRowProps> {
@@ -27,7 +27,7 @@ export default class TopRow extends React.Component<TopRowProps> {
   }
 
   getStateMapping(x: number, y: number): StateMapping {
-    for (var item of this.props.topMappingStates) {
+    for (const item of this.props.topMappingStates) {
       if (item.x === x && item.y === y)
         return item
     }
@@ -45,10 +45,10 @@ export default class TopRow extends React.Component<TopRowProps> {
   }
 
   public render (): JSX.Element {
-    var buttons: JSX.Element[] = []
-    var count = 1;
-    for (var id of this.props.topMapping.two) {
-      var stateMapping = this.getStateMapping(count, 1)
+    const buttons: JSX.Element[] = []
+    let count = 1;
+    for (const id of this.props.topMapping.two) {
+      const stateMapping = this.getStateMapping(count, 1)
       buttons.push(
         <BoardButton
           selectButton={this.selectButton}

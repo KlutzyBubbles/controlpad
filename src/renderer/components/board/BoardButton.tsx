@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Color, RGB } from '../../../common/Color';
-import { PresetColor, Section } from '../../Constants'
-import { padManagerInstance } from '../../utils/PadManager';
+import { Section } from '../../Constants'
 
 export const enum BoardButtonType {
   Circle = 0,
@@ -14,7 +13,7 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
   y: number
   type: BoardButtonType
   id: number[]
-  selectButton: Function
+  selectButton: (x?: number, y?: number) => void
   activeColor: RGB
   inactiveColor: RGB
   flashing: boolean
@@ -23,7 +22,7 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
   pressed: boolean
 }
 
-export default class BoardButton extends React.Component<BoardButtonProps, {}> {
+export default class BoardButton extends React.Component<BoardButtonProps, Record<string, never>> {
   constructor (props: BoardButtonProps) {
     super(props)
     // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
@@ -64,7 +63,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
       classes.push('circle')
     }
 
-    var buttonColor = this.props.pressed ? Color.fromRgba(this.props.activeColor).toHex() : Color.fromRgba(this.props.inactiveColor).toHex()
+    let buttonColor = this.props.pressed ? Color.fromRgba(this.props.activeColor).toHex() : Color.fromRgba(this.props.inactiveColor).toHex()
     if (this.props.x === 8 && this.props.y === 1 && this.props.section === Section.Main) {
       // console.log(this.props.pressed)
       // console.log(this.props.inactiveColor)
@@ -73,7 +72,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, {}> {
     }
     if (buttonColor === '#000000')
       buttonColor = '#7D8386';
-    var styles = {
+    const styles = {
       "backgroundColor": buttonColor,
       "borderColor": this.props.pressed ? "#fff" : this.props.editing ? "#ff00ef" : buttonColor
     }

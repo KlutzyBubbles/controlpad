@@ -12,7 +12,7 @@ import SideRow from './SideRow'
 
 export interface LaunchPadProps extends React.ClassAttributes<LaunchPad> {
   mapping: Mapping
-  selectButton: Function
+  selectButton: (section?: Section, x?: number, y?: number) => void
   stateMappings: StateMappings
 }
 

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { SketchPicker, ColorResult } from 'react-color';
 import { Color, RGB } from '../../../common/Color';
 import { StateMappings } from '../../../common/interfaces';
 import { SelectedButton } from '../App';
@@ -7,24 +6,23 @@ import { Color as MUIColor, ColorPicker, createColor, ColorFormat } from "mui-co
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
-import ColorWrapper from './ColorWrapper';
-import { create } from 'domain';
+import { Section } from '@renderer/Constants';
 
 interface ColorEditorProps {
     selectedButton: SelectedButton
     stateMappings: StateMappings
-    changeColor: Function
+    changeColor: (section: Section, x: number, y: number, color: RGB, active: boolean) => void
 }
 
 interface ColorEditorState {
     currentSelected: SelectedButton
     activeColor: MUIColor
     inactiveColor: MUIColor
-    selectedInactiveColor: PresetColors
-    selectedActiveColor: PresetColors
+    selectedInactiveColor: PresetColor
+    selectedActiveColor: PresetColor
 }
 
-const enum PresetColors {
+const enum PresetColor {
     None = 'none',
     Black = 'black',
     Red = 'red',
@@ -46,15 +44,15 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                 r: 241,
                 g: 112,
                 b: 19,
-            }, "rgb" as any as ColorFormat),
+            }, "rgb" as unknown as ColorFormat),
             inactiveColor: createColor({
                 r: 241,
                 g: 112,
                 b: 19,
-            }, "rgb" as any as ColorFormat),
+            }, "rgb" as unknown as ColorFormat),
             currentSelected: props.selectedButton,
-            selectedInactiveColor: PresetColors.None,
-            selectedActiveColor: PresetColors.None
+            selectedInactiveColor: PresetColor.None,
+            selectedActiveColor: PresetColor.None
         }, ...this.refreshColors(true)}
     }
 
@@ -72,7 +70,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         })
         if (!radio) {
             this.setState({
-                selectedActiveColor: PresetColors.None
+                selectedActiveColor: PresetColor.None
             })
         }
         // this.state.activeColor = color
@@ -89,7 +87,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         if (!radio) {
             // console.log(radio)
             this.setState({
-                selectedInactiveColor: PresetColors.None
+                selectedInactiveColor: PresetColor.None
             })
         }
         //this.state.inactiveColor = color
@@ -109,7 +107,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         if (this.props.selectedButton !== undefined)
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.toRgb6(color.rgb), false)
     };
-*/
+*
     handleChange = (newValue: MUIColor) => {
         // console.log("change", newValue);
         // setColor(`#${newValue.hex}`);
@@ -117,7 +115,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         //     color: newValue
         // });
         // action('changed')(newValue);
-    };
+    };*/
 
     refreshColors(init = false) {
         if (!Object.prototype.hasOwnProperty.call(this.props.stateMappings, this.props.selectedButton.section))
@@ -125,19 +123,19 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         // console.log(this.props.stateMappings[this.props.selectedButton.section])
         if (init || this.state.currentSelected !== undefined && this.props.selectedButton != this.state.currentSelected) {
             console.log('refreshColors')
-            for (var state of this.props.stateMappings[this.props.selectedButton.section]) {
+            for (const state of this.props.stateMappings[this.props.selectedButton.section]) {
                 if (state.x === this.props.selectedButton.x && state.y === this.props.selectedButton.y) {
                     if (init) {
                         return {
                             currentSelected: this.props.selectedButton,
-                            activeColor: createColor(state.activeColor, "rgb" as any as ColorFormat),
-                            inactiveColor: createColor(state.inactiveColor, "rgb" as any as ColorFormat)
+                            activeColor: createColor(state.activeColor, "rgb" as unknown as ColorFormat),
+                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat)
                         }
                     } else {
                         this.setState({
                             currentSelected: this.props.selectedButton,
-                            activeColor: createColor(state.activeColor, "rgb" as any as ColorFormat),
-                            inactiveColor: createColor(state.inactiveColor, "rgb" as any as ColorFormat)
+                            activeColor: createColor(state.activeColor, "rgb" as unknown as ColorFormat),
+                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat)
                         })
                     }
                     // this.activeColor = createColor(Color.fromRgb6(state.activeColor).toRgb8(), "rgb" as any as ColorFormat)
@@ -147,15 +145,15 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         }
     }
 
-    handleInactivePresetChange = (event: any) => {
+    handleInactivePresetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            selectedInactiveColor: event.target.value
+            selectedInactiveColor: event.target.value as PresetColor
         })
         this.handleInactiveChange(createColor(event.target.value), true)
     }
 
-    inactiveItemProps = (item: PresetColors) => {
-        var color = createColor(item).css.backgroundColor
+    inactiveItemProps = (item: PresetColor) => {
+        const color = createColor(item).css.backgroundColor
         return {
             checked: this.state.selectedInactiveColor === item,
             onChange: this.handleInactivePresetChange,
@@ -171,15 +169,15 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         }
     };
 
-    handleActivePresetChange = (event: any) => {
+    handleActivePresetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            selectedActiveColor: event.target.value
+            selectedActiveColor: event.target.value as PresetColor
         })
         this.handleActiveChange(createColor(event.target.value), true)
     }
 
-    activeItemProps = (item: PresetColors) => {
-        var color = createColor(item).css.backgroundColor
+    activeItemProps = (item: PresetColor) => {
+        const color = createColor(item).css.backgroundColor
         return {
             checked: this.state.selectedActiveColor === item,
             onChange: this.handleActivePresetChange,
@@ -216,15 +214,15 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                         Inactive
                     </Typography>
                     <ColorPicker disableAlpha={true} hideTextfield={true} value={this.state.inactiveColor} onChange={this.handleInactiveChange} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Black)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Red)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Lime)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Blue)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Yellow)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Orange)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Pink)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.Purple)} />
-                    <Radio {...this.inactiveItemProps(PresetColors.LightBlue)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Black)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Red)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Lime)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Blue)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Yellow)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Orange)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Pink)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.Purple)} />
+                    <Radio {...this.inactiveItemProps(PresetColor.LightBlue)} />
                 </Stack>
                 <Stack
                     direction="row"
@@ -236,43 +234,17 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                         Active
                     </Typography>
                     <ColorPicker disableAlpha={true} hideTextfield={true} value={this.state.activeColor} onChange={this.handleActiveChange} />
-                    <Radio {...this.activeItemProps(PresetColors.Black)} />
-                    <Radio {...this.activeItemProps(PresetColors.Red)} />
-                    <Radio {...this.activeItemProps(PresetColors.Lime)} />
-                    <Radio {...this.activeItemProps(PresetColors.Blue)} />
-                    <Radio {...this.activeItemProps(PresetColors.Yellow)} />
-                    <Radio {...this.activeItemProps(PresetColors.Orange)} />
-                    <Radio {...this.activeItemProps(PresetColors.Pink)} />
-                    <Radio {...this.activeItemProps(PresetColors.Purple)} />
-                    <Radio {...this.activeItemProps(PresetColors.LightBlue)} />
+                    <Radio {...this.activeItemProps(PresetColor.Black)} />
+                    <Radio {...this.activeItemProps(PresetColor.Red)} />
+                    <Radio {...this.activeItemProps(PresetColor.Lime)} />
+                    <Radio {...this.activeItemProps(PresetColor.Blue)} />
+                    <Radio {...this.activeItemProps(PresetColor.Yellow)} />
+                    <Radio {...this.activeItemProps(PresetColor.Orange)} />
+                    <Radio {...this.activeItemProps(PresetColor.Pink)} />
+                    <Radio {...this.activeItemProps(PresetColor.Purple)} />
+                    <Radio {...this.activeItemProps(PresetColor.LightBlue)} />
                 </Stack>
-            </Stack>)
-        /*
-        return (
-            <React.Fragment>
-                <span className="title">Inactive</span>
-                <ColorPicker value={this.state.color} onChange={this.handleChange} />
-                <div className='color'>
-                    <div className='swatch' onClick={ this.handleInactiveClick }>
-                    <div style={ inactiveColorStyle } />
-                    </div>
-                    { this.state.displayInactivePicker ? <div className='popover'>
-                        <div className='cover' onClick={ this.handleInactiveClose }/>
-                        <SketchPicker color={ this.inactiveColor } onChange={ this.handleInactiveChange } />
-                    </div> : null }
-                </div>
-                <span className="title">Active</span>
-                <div className='color'>
-                    <div className='swatch' onClick={ this.handleActiveClick }>
-                    <div style={ activeColorStyle } />
-                    </div>
-                    { this.state.displayActivePicker ? <div className='popover'>
-                        <div className='cover' onClick={ this.handleActiveClose }/>
-                        <SketchPicker color={ this.activeColor } onChange={ this.handleActiveChange } />
-                    </div> : null }
-                </div>
-            </React.Fragment>
+            </Stack>
         )
-        */
     }
 }
