@@ -53,19 +53,19 @@ export default class LaunchPad extends React.Component< LaunchPadProps, State > 
           selectButton={this.props.selectButton}
           key='top'
           topMapping={this.props.mapping.topRow}
-          topMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Top) ? this.props.stateMappings[Section.Top] : []}
+          topMappingStates={this.props.stateMappings !== undefined ? Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Top) ? this.props.stateMappings[Section.Top] : [] : []}
         />
         <MainBoard
           selectButton={this.props.selectButton}
           key='main'
           mainMapping={this.props.mapping.centerRows}
-          mainMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Main) ? this.props.stateMappings[Section.Main] : []}
+          mainMappingStates={this.props.stateMappings !== undefined ? Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Main) ? this.props.stateMappings[Section.Main] : [] : []}
         />
         <SideRow
           selectButton={this.props.selectButton}
           key='side'
           sideMapping={this.props.mapping.sideColumn}
-          sideMappingStates={Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Side) ? this.props.stateMappings[Section.Side] : []}
+          sideMappingStates={this.props.stateMappings !== undefined ? Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Side) ? this.props.stateMappings[Section.Side] : [] : []}
         />
       </div>
     )

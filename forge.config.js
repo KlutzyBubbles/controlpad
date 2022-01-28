@@ -1,30 +1,42 @@
 const path = require('path');
 const rootDir = process.cwd();
+const package = require('./package.json');
 
 module.exports = {
   packagerConfig: {
     asar: true,
-    executableName: 'Control Pad',
+    executableName: 'controlpad',
     appCopyright: `Copyright (C) ${new Date().getFullYear()} KlutzyBubbles`,
   },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {
-        name: 'electron-react-typescript-webpack-2021',
-      },
+      platforms: ['win32'],
+      config: (arch) => {
+        return {
+          name: 'controlpad',
+          authors: 'KlutzyBubbles',
+          exe: 'controlpad.exe',
+          noMsi: true,
+          remoteReleases: '',
+          setupExe: `controlpad-${package.version}-setup-${arch}.exe`,
+          setupIcon: path.resolve(rootDir, 'assets', 'icon.ico'),
+          // certificateFile: process.env['WINDOWS_CODESIGN_FILE'],
+          // certificatePassword: process.env['WINDOWS_CODESIGN_PASSWORD'],
+        }
+      }
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+      platforms: ['darwin', 'win32']
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      platforms: ['linux']
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      platforms: ['linux']
     },
   ],
   plugins: [

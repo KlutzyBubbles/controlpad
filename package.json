@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "config": {
-    "forge": "./tools/forge/forge.config.js"
+    "forge": "./forge.config.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.63",
