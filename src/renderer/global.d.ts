@@ -1,1 +1,0 @@
-declare let CONTROLPAD_RELEASE: string
