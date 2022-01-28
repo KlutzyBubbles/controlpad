@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
-import context from '../titlebarContextApi';
+import context from '../TitlebarContextApi';
 
 type Props = {
   platform: string;

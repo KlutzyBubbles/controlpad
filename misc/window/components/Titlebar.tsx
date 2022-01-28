@@ -1,8 +1,8 @@
 import React, { useEffect, createRef, useState, useContext } from 'react';
-import titlebarMenus from '../titlebarMenus';
+import titlebarMenus from '../TitlebarMenus';
 import classNames from 'classnames';
 import WindowControls from './WindowControls';
-import context from '../titlebarContextApi';
+import context from '../TitlebarContextApi';
 import { WindowContext } from './WindowFrame';
 import './Titlebar.less';
 
