@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StateMappings } from '../../../common/Interfaces'
+import { KeyCombo, StateMappings } from '../../../common/Interfaces'
 import { sectionToString } from '../../Utils'
 import { SelectedButton } from '../App'
 import ColorEditor from './ColorEditor'
@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { RGB } from '../../../common/Color'
 import { Section } from '../../Constants'
+import KeyEditor from './KeyEditor'
 
 export const enum BoardButtonType {
     Circle = 0,
@@ -25,6 +26,7 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
     selectedButton?: SelectedButton
     changeColor: (section: Section, x: number, y: number, color: RGB, active: boolean) => void
     changeName: (section: Section, x: number, y: number, name: string) => void
+    changeKeyCombo: (section: Section, x: number, y: number, combo: KeyCombo) => void
     stateMappings: StateMappings
 }
 
@@ -35,12 +37,12 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
     }
 
     handleTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        console.log(event.target.value)
+        // console.log(event.target.value)
         // this.setState({
         //     name: event.target.value
         // })
         if (this.props.selectedButton === undefined)
-          return
+            return
         this.props.changeName(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, event.target.value)
     }
 
@@ -74,10 +76,10 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
                         spacing={3}
                         alignItems="baseline"
                     >
-                            <Typography variant="h6" gutterBottom component="div">
-                                {this.props.selectedButton !== undefined ? `Edit Key in ${sectionToString(this.props.selectedButton.section)}, (${this.props.selectedButton.x}, ${this.props.selectedButton.y})` : 'No Button Selected'}
-                            </Typography>
-                            <Button variant="outlined">Clear All</Button>
+                        <Typography variant="h6" gutterBottom component="div">
+                            {this.props.selectedButton !== undefined ? `Edit Key in ${sectionToString(this.props.selectedButton.section)}, (${this.props.selectedButton.x}, ${this.props.selectedButton.y})` : 'No Button Selected'}
+                        </Typography>
+                        <Button variant="outlined">Clear All</Button>
                     </Stack>
                     <Stack
                         direction="column"
@@ -86,7 +88,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
                         spacing={2}
                         sx={{ mb: 2 }}
                     >
-                            <TextField id="key-name" label="Name" variant="standard" onChange={this.handleTitleChange} value={this.getName()}/>
+                        <TextField id="name" label="Name" variant="standard" onChange={this.handleTitleChange} value={this.getName()} />
                     </Stack>
                     <Accordion defaultExpanded={true} disableGutters={true}>
                         <AccordionSummary
@@ -113,10 +115,11 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
                             <Typography>Hotkey</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
-                                Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                                Aliquam eget maximus est, id dignissim quam.
-                            </Typography>
+                            <KeyEditor
+                                changeKeyCombo={this.props.changeKeyCombo}
+                                selectedButton={this.props.selectedButton}
+                                stateMappings={this.props.stateMappings}
+                            />
                         </AccordionDetails>
                     </Accordion>
                 </Container>

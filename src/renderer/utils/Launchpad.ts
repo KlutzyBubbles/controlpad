@@ -57,15 +57,15 @@ export default class Launchpad extends EventEmitter {
     }
 
     getButtonCombo(section: Section, x: number, y: number): (number | undefined)[] {
-        console.log('getButtonCombo')
+        // console.log('getButtonCombo')
         return [this.getSectionNumber(section), this.getButtonNumber(section, x, y)]
     }
 
     getButtonNumber(section: Section, x: number, y: number): number | undefined {
         // console.log(`getButtonNumber(${section}, ${x}, ${y})`)
-        console.log('getButtonNumber')
-        console.log(mapping.gridMappings[section])
-        console.log(section)
+        // console.log('getButtonNumber')
+        // console.log(mapping.gridMappings[section])
+        // console.log(section)
         for (const item of mapping.gridMappings[section]) {
             if (item.x === x && item.y === y)
                 return item.number
@@ -102,7 +102,7 @@ export default class Launchpad extends EventEmitter {
     }
 
     setColor(section: Section, x: number, y: number, color: Color) {
-        console.log('setColor')
+        //console.log('setColor')
         const buttonNumber = this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
@@ -118,7 +118,7 @@ export default class Launchpad extends EventEmitter {
     }
 
     startFlash(section: Section, x: number, y: number, color: PresetColor) {
-        console.log('startFlash')
+        //console.log('startFlash')
         const buttonNumber = this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
@@ -255,9 +255,9 @@ export default class Launchpad extends EventEmitter {
                         e.data.slice(13, 16).reduce((s: any, el: any) => s + el, "")
                     );
 
-                    console.log("removing");
+                    //console.log("removing");
                     this.input.removeListener("sysex", () => {
-                        console.log('removed')
+                        //console.log('removed')
                     });
 
                     if (versionNum < 171) res(LaunchpadTypes.LPMK2);

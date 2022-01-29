@@ -3,7 +3,7 @@ import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
 import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, StateMappingOptional } from '../../common/Interfaces'
+import { StateMappings, StateMapping, StateMappingOptional, KeyCombo } from '../../common/Interfaces'
 import { Section, PresetColor } from '../Constants'
 import Editor from './editor/Editor'
 import { Color, RGB } from '../../common/Color'
@@ -71,17 +71,17 @@ export default class App extends React.Component<Record<string, never>, AppState
   }
 
   refreshBoardState() {
-    console.log('refreshBoardState')
+    // console.log('refreshBoardState')
     if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
       // console.log('padManagerInstance not undefined')
       const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
       if (launchpad !== undefined) {
         // console.log('launchpad not undefined')
         for (const sectionName in this.state.stateMappings) {
-          console.log(`refreshBoardState 0 ${sectionName}`)
+          // console.log(`refreshBoardState 0 ${sectionName}`)
           const section = parseInt(sectionName)
           for (const state of this.state.stateMappings[sectionName]) {
-            console.log(`refreshBoardState 1 ${section}`)
+            // console.log(`refreshBoardState 1 ${section}`)
             launchpad.setColor(section, state.x, state.y, Color.fromRgba(state.pressed ? state.activeColor : state.inactiveColor))
             if (state.editing) {
               // console.log('setting')
@@ -137,6 +137,7 @@ export default class App extends React.Component<Record<string, never>, AppState
       y: y,
       activeColor: { r: 0, g: 0, b: 0 },
       inactiveColor: { r: 0, g: 0, b: 0 },
+      keyCombo: {},
       pulsing: false,
       flashing: false,
       editing: false,
@@ -207,12 +208,12 @@ export default class App extends React.Component<Record<string, never>, AppState
   changeColor = (section: Section, x: number, y: number, color: RGB, active: boolean) => {
     // console.log('changeColor')
     if (active == false && padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-      console.log('actually setting color')
+      // console.log('actually setting color')
       const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
       const now = Date.now()
       if (now - this.state.lastColorUpdate > 100) {
-        console.log('greater than')
-        console.log(`changeColor 1 ${section}`)
+        // console.log('greater than')
+        // console.log(`changeColor 1 ${section}`)
         launchpad?.setColor(section, x, y, Color.fromRgba(color))
         this.setState({
           lastColorUpdate: now
@@ -224,13 +225,19 @@ export default class App extends React.Component<Record<string, never>, AppState
       changes.activeColor = color
     else
       changes.inactiveColor = color
-      console.log('setting state')
+      // console.log('setting state')
     this.setState(this.changeState(this.state, section, x, y, changes) as AppState)
   }
 
   changeName = (section: Section, x: number, y: number, name: string) => {
     this.setState(this.changeState(this.state, section, x, y, {
       name: name
+    }) as AppState)
+  }
+
+  changeKeyCombo = (section: Section, x: number, y: number, combo: KeyCombo) => {
+    this.setState(this.changeState(this.state, section, x, y, {
+      keyCombo: combo
     }) as AppState)
   }
 
@@ -252,6 +259,7 @@ export default class App extends React.Component<Record<string, never>, AppState
                 <Editor
                   changeColor={this.changeColor}
                   changeName={this.changeName}
+                  changeKeyCombo={this.changeKeyCombo}
                   selectedButton={this.state.selected}
                   stateMappings={this.state.stateMappings}
                 />

@@ -7,7 +7,7 @@ type EventItem = {
 
 const configContext = {
   saveMappings(event: EventItem) {
-    console.log('savemappings', event)
+    // console.log('savemappings', event)
     ipcRenderer.invoke('mappings-save', event);
   },
   loadMappings() {

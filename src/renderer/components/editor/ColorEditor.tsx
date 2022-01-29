@@ -59,7 +59,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
     // handleActiveClose = () => {
     //     this.setState({ displayActivePicker: false })
     // };
-// 
+
     // handleInactiveClose = () => {
     //     this.setState({ displayInactivePicker: false })
     // };
@@ -75,7 +75,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         }
         // this.state.activeColor = color
         if (this.props.selectedButton !== undefined) {
-            console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
+            // console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.fromRgbArray(color.rgb).toRgb8(), true)
         }
     };
@@ -92,7 +92,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         }
         //this.state.inactiveColor = color
         if (this.props.selectedButton !== undefined) {
-            console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
+            // console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.fromRgbArray(color.rgb).toRgb8(), false)
         }
     };
@@ -122,7 +122,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
             this.props.stateMappings[this.props.selectedButton.section] = []
         // console.log(this.props.stateMappings[this.props.selectedButton.section])
         if (init || this.state.currentSelected !== undefined && this.props.selectedButton != this.state.currentSelected) {
-            console.log('refreshColors')
+            // console.log('refreshColors')
             for (const state of this.props.stateMappings[this.props.selectedButton.section]) {
                 if (state.x === this.props.selectedButton.x && state.y === this.props.selectedButton.y) {
                     if (init) {
@@ -196,7 +196,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
 
     public render(): JSX.Element {
         this.refreshColors()
-        console.log(this.state.inactiveColor)
+        // console.log(this.state.inactiveColor)
         return (
             <Stack
                 direction="column"

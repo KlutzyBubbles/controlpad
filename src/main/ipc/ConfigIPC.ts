@@ -4,8 +4,8 @@ import { default as configStore, ConfigStore } from '../ConfigStore';
 
 const registerConfigIPC = () => {
     ipcMain.handle('mappings-save', (event: IpcMainInvokeEvent, data: ConfigStore) => {
-        console.log('mappings-ssave', data.stateMappings)
-        console.log(data)
+        // console.log('mappings-ssave', data.stateMappings)
+        // console.log(data)
         configStore.set('stateMappings', data.stateMappings as StateMappings)
     });
     ipcMain.handle('mappings-load', () => {

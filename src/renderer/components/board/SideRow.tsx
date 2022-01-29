@@ -36,6 +36,7 @@ export default class SideRow extends React.Component<SideRowProps> {
       y: y,
       activeColor: { r: 0, g: 0, b: 0 },
       inactiveColor: { r: 0, g: 0, b: 0 },
+      keyCombo: {},
       pulsing: false,
       flashing: false,
       editing: false,

@@ -13,6 +13,7 @@ export interface StateMapping {
   y: number
   activeColor: RGB
   inactiveColor: RGB
+  keyCombo: KeyCombo
   pulsing: boolean
   flashing: boolean
   editing: boolean
@@ -25,6 +26,7 @@ export interface StateMappingOptional {
   y?: number
   activeColor?: RGB
   inactiveColor?: RGB
+  keyCombo?: KeyCombo
   pulsing?: boolean
   flashing?: boolean
   editing?: boolean
@@ -59,4 +61,11 @@ export interface Mapping {
   centerRows: RowMapping[]
   buttonMappings: AnyKey
   gridMappings: GridMapping
+}
+
+export interface KeyCombo {
+  ctrl?: string
+  shift?: string
+  alt?: string
+  keys?: string[]
 }
