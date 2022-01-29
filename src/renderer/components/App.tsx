@@ -68,6 +68,12 @@ export default class App extends React.Component<Record<string, never>, AppState
         stateMappings: mappings || {}
       })
     })
+    context.addChangeListener((loadedMappings) => {
+      console.log('loadListener')
+      this.setState({
+        stateMappings: loadedMappings || {}
+      })
+    })
   }
 
   refreshBoardState() {

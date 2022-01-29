@@ -64,7 +64,8 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
     if (result.canceled) {
       console.log('Config was not saved due to being cancelled')
     } else {
-      console.error('Not implemented yet')
+      saveToFile(result.filePath)
+      // console.error('Not implemented yet')
     }
   });
 
@@ -85,8 +86,13 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
     })
     if (result.canceled) {
       console.log('Config was not loaded due to being cancelled')
+      return undefined
     } else {
-      console.error('Not implemented yet')
+      const mappings = await loadFromFile(result.filePaths[0])
+      console.log(mappings)
+      mainWindow.webContents.send('state-mapping-load', mappings)
+      return mappings
+      // console.error('Not implemented yet')
     }
   });
 

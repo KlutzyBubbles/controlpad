@@ -32,7 +32,7 @@ const titlebarContext = {
     ipcRenderer.invoke('file-export');
   },
   import() {
-    ipcRenderer.invoke('file-import');
+    return ipcRenderer.invoke('file-import');
   },
   close_tray() {
     ipcRenderer.invoke('window-close-tray');
