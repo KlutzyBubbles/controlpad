@@ -129,13 +129,17 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                         return {
                             currentSelected: this.props.selectedButton,
                             activeColor: createColor(state.activeColor, "rgb" as unknown as ColorFormat),
-                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat)
+                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat),
+                            selectedInactiveColor: PresetColor.None,
+                            selectedActiveColor: PresetColor.None
                         }
                     } else {
                         this.setState({
                             currentSelected: this.props.selectedButton,
                             activeColor: createColor(state.activeColor, "rgb" as unknown as ColorFormat),
-                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat)
+                            inactiveColor: createColor(state.inactiveColor, "rgb" as unknown as ColorFormat),
+                            selectedInactiveColor: PresetColor.None,
+                            selectedActiveColor: PresetColor.None
                         })
                     }
                     // this.activeColor = createColor(Color.fromRgb6(state.activeColor).toRgb8(), "rgb" as any as ColorFormat)
