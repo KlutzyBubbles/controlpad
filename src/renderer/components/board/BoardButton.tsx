@@ -20,6 +20,8 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
   pulsing: boolean
   editing: boolean
   pressed: boolean
+  hasKeyCombo: boolean
+  name: string
 }
 
 export default class BoardButton extends React.Component<BoardButtonProps, Record<string, never>> {
@@ -70,6 +72,18 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
       // console.log(this.props.activeColor)
       // console.log(buttonColor)
     }
+
+    /*
+    // radial-gradient(#85FF00, #61942A)
+    let finalButtonColor = '#7D8386'
+    if (buttonColor !== '#000000')
+      finalButtonColor = `radial-gradient(${buttonColor}, ${Color.lightenDarkenColor(buttonColor, -0.50)})`
+    const styles = {
+      "background": finalButtonColor,
+      "borderColor": this.props.pressed ? "#fff" : this.props.editing ? "#ff00ef" : 'rgba(0,0,0,0)'
+    }
+    */
+
     if (buttonColor === '#000000')
       buttonColor = '#7D8386';
     const styles = {
@@ -78,7 +92,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
     }
 
     return (
-      <div className={classes.join(' ')} onClick={this.handleClick} style={styles}></div>
+      <div className={classes.join(' ')} onClick={this.handleClick} style={styles}>{this.props.name}</div>
     )
   }
 }

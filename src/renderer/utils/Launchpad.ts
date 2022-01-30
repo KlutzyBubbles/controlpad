@@ -28,21 +28,21 @@ export default class Launchpad extends EventEmitter {
             return;
         }
         // console.log(`midimessage ${data}`)
-        const codes = this.getMessageCodes(data[0], data[1])
+        const codes = Launchpad.getMessageCodes(data[0], data[1])
         if (codes === undefined) {
             console.error(`Invalid data received from ${this.name}, Data: ${data}, Codes: ${codes}`);
             return;
         }
         if (data[2] === mapping.pressedState[0]) {
-            this.emit('released', codes)
+            this.emit('released', codes, this.name)
         } else if (data[2] === mapping.pressedState[1]) {
-            this.emit('pressed', codes)
+            this.emit('pressed', codes, this.name)
         } else {
             console.error(`Invalid pressed state received from ${this.name}, expected ${mapping.pressedState}, received ${data[2]}`);
         }
     }
 
-    getMessageCodes(item1: number, item2: number): number[] | undefined {
+    static getMessageCodes(item1: number, item2: number): number[] | undefined {
         // console.log(`getMessageCodes(${item1}, ${item2})`)
         for (const sectionName in mapping.gridMappings) {
             let currentSection = -1
@@ -56,12 +56,12 @@ export default class Launchpad extends EventEmitter {
         return undefined
     }
 
-    getButtonCombo(section: Section, x: number, y: number): (number | undefined)[] {
+    static getButtonCombo(section: Section, x: number, y: number): (number | undefined)[] {
         // console.log('getButtonCombo')
-        return [this.getSectionNumber(section), this.getButtonNumber(section, x, y)]
+        return [Launchpad.getSectionNumber(section), Launchpad.getButtonNumber(section, x, y)]
     }
 
-    getButtonNumber(section: Section, x: number, y: number): number | undefined {
+    static getButtonNumber(section: Section, x: number, y: number): number | undefined {
         // console.log(`getButtonNumber(${section}, ${x}, ${y})`)
         // console.log('getButtonNumber')
         // console.log(mapping.gridMappings[section])
@@ -73,7 +73,7 @@ export default class Launchpad extends EventEmitter {
         return undefined
     }
 
-    getSectionNumber(section: Section): number | undefined {
+    static getSectionNumber(section: Section): number | undefined {
         for (const item of mapping.gridMappings[section]) {
             if (item.x === 0 && item.y === 0)
                 return item.number
@@ -103,7 +103,7 @@ export default class Launchpad extends EventEmitter {
 
     setColor(section: Section, x: number, y: number, color: Color) {
         //console.log('setColor')
-        const buttonNumber = this.getButtonNumber(section, x, y)
+        const buttonNumber = Launchpad.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
         else {
@@ -119,7 +119,7 @@ export default class Launchpad extends EventEmitter {
 
     startFlash(section: Section, x: number, y: number, color: PresetColor) {
         //console.log('startFlash')
-        const buttonNumber = this.getButtonNumber(section, x, y)
+        const buttonNumber = Launchpad.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
             console.error(`Invalname button lookup for ${section}, (${x}, ${y})`)
         else {

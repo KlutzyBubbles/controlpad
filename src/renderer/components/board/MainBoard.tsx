@@ -1,3 +1,4 @@
+import { hasKeyCombo } from '@renderer/utils/StateUtil'
 import * as React from 'react'
 import {
   StateMapping,
@@ -59,6 +60,7 @@ export default class MainBoard extends React.Component<MainBoardProps> {
         // console.log(stateMapping)
         buttons.push(
           <BoardButton
+            key={`${xCount},${yCount}`}
             selectButton={this.selectButton}
             section={Section.Main}
             x={xCount}
@@ -71,12 +73,14 @@ export default class MainBoard extends React.Component<MainBoardProps> {
             pulsing={stateMapping.pulsing}
             editing={stateMapping.editing}
             pressed={stateMapping.pressed}
+            hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
+            name={stateMapping.name}
           />
         )
         xCount++;
       }
       rows.push(
-        <div className={"row"}>
+        <div key={yCount} className={"row"}>
           {buttons}
         </div>
       )

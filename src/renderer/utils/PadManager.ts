@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { WebMidi } from 'webmidi'
+import { PortEvent, WebMidi } from 'webmidi'
 import Launchpad from './Launchpad'
 
 export class PadManager extends EventEmitter {
@@ -34,13 +34,17 @@ export class PadManager extends EventEmitter {
         // console.log(this.scan)
         this.online = true
         this.scan()
-        WebMidi.addListener("connected", (e: any) => {
-            //console.log(e)
-            this.addLaunchpad(e.port._midiOutput.name)
+        WebMidi.addListener("connected", (e: PortEvent) => {
+            console.log(e)
+            console.log(e.port.name)
+            //this.addLaunchpad(e.port._midiOutput.name)
+            this.addLaunchpad(e.port.name)
         });
-        WebMidi.addListener("disconnected", (e: any) => {
-            //console.log(e)
-            this.removeLaunchpad(e.port._midiOutput.name)
+        WebMidi.addListener("disconnected", (e: PortEvent) => {
+            console.log(e)
+            console.log(e.port.name)
+            //this.removeLaunchpad(e.port._midiOutput.name)
+            this.addLaunchpad(e.port.name)
         });
         if (typeof callback === "function") callback()
     }

@@ -1,3 +1,4 @@
+import { hasKeyCombo } from '@renderer/utils/StateUtil'
 import * as React from 'react'
 import {
   StateMapping,
@@ -52,6 +53,7 @@ export default class SideRow extends React.Component<SideRowProps> {
       const stateMapping = this.getStateMapping(1, count)
       buttons.push(
         <BoardButton
+          key={`${1},${count}`}
           selectButton={this.selectButton}
           section={Section.Side}
           x={1}
@@ -64,6 +66,8 @@ export default class SideRow extends React.Component<SideRowProps> {
           pulsing={stateMapping.pulsing}
           editing={stateMapping.editing}
           pressed={stateMapping.pressed}
+          hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
+          name={stateMapping.name}
         />
       )
       count--;

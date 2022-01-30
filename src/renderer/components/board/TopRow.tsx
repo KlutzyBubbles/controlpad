@@ -1,3 +1,4 @@
+import { hasKeyCombo } from '@renderer/utils/StateUtil'
 import * as React from 'react'
 import {
   StateMapping,
@@ -52,6 +53,7 @@ export default class TopRow extends React.Component<TopRowProps> {
       const stateMapping = this.getStateMapping(count, 1)
       buttons.push(
         <BoardButton
+          key={`${count},${1}`}
           selectButton={this.selectButton}
           section={Section.Top}
           x={count}
@@ -64,6 +66,8 @@ export default class TopRow extends React.Component<TopRowProps> {
           pulsing={stateMapping.pulsing}
           editing={stateMapping.editing}
           pressed={stateMapping.pressed}
+          hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
+          name={stateMapping.name}
         />
       )
       count++;

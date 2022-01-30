@@ -11,7 +11,7 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      platforms: ['win32'],
+      // platforms: ['win32'],
       config: (arch) => {
         return {
           name: 'controlpad',
@@ -28,15 +28,15 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin', 'win32']
+      // platforms: ['darwin', 'win32']
     },
     {
       name: '@electron-forge/maker-deb',
-      platforms: ['linux']
+      // platforms: ['linux']
     },
     {
       name: '@electron-forge/maker-rpm',
-      platforms: ['linux']
+      // platforms: ['linux']
     },
   ],
   plugins: [

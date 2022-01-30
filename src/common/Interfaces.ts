@@ -68,4 +68,9 @@ export interface KeyCombo {
   shift?: string
   alt?: string
   keys?: string[]
+  toggle?: boolean
+}
+export interface KeyComboIPC {
+  keyCombo: KeyCombo
+  active: boolean
 }

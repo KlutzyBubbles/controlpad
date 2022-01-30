@@ -108,4 +108,60 @@ export class Color {
             Math.floor(Math.random() * 256),
             Math.floor(Math.random() * 256))
     }
+
+    /*
+    static lightenDarkenColor(colorCode: string, amount: number) {
+        var usePound = false;
+        if (colorCode[0] == "#") {
+            colorCode = colorCode.slice(1);
+            usePound = true;
+        }
+        var num = parseInt(colorCode, 16);
+        var r = (num >> 16) + amount;
+        if (r > 255) {
+            r = 255;
+        } else if (r < 0) {
+            r = 0;
+        }
+        var b = ((num >> 8) & 0x00FF) + amount;
+        if (b > 255) {
+            b = 255;
+        } else if (b < 0) {
+            b = 0;
+        }
+        var g = (num & 0x0000FF) + amount;
+        if (g > 255) {
+            g = 255;
+        } else if (g < 0) {
+            g = 0;
+        }
+        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+    }
+    *
+
+    static lightenDarkenColor(colorCode: string, amount: number) {
+        var usePound = false;
+        if (colorCode[0] == "#") {
+            colorCode = colorCode.slice(1);
+            usePound = true;
+        }
+        var num = parseInt(colorCode, 16);
+        var r = (num >> 16) + amount;
+        var b = ((num >> 8) & 0x00FF) + amount;
+        var g = (num & 0x0000FF) + amount;
+        if (amount < 0) {
+            r = (1 + amount) * r;
+            g = (1 + amount) * g;
+            b = (1 + amount) * b;
+        } else {
+            r = (1 - amount) * r + amount * 255;
+            g = (1 - amount) * g + amount * 255;
+            b = (1 - amount) * b + amount * 255;
+        }
+        r = r > 255 ? 255 : r < 0 ? 0 : r
+        g = g > 255 ? 255 : g < 0 ? 0 : g
+        b = b > 255 ? 255 : b < 0 ? 0 : b
+        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+    }
+    */
 }
