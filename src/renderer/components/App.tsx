@@ -3,23 +3,23 @@ import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
 import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, StateMappingOptional, KeyCombo } from '../../common/Interfaces'
+import { StateMappings, StateMapping, StateMappingOptional, KeyCombo } from '@common/Interfaces'
 import { Section, PresetColor } from '../Constants'
 import Editor from './editor/Editor'
-import { Color, RGB } from '../../common/Color'
-import { padManagerInstance } from '../utils/PadManager'
+import { Color, RGB } from '@common/Color'
+import { padManagerInstance } from '@common/PadManager'
 import equal from 'fast-deep-equal'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { styled, ThemeProvider } from '@mui/material/styles';
-import configContext from '../preload/ConfigContextApi';
+import configContext from '../preload/config/ConfigContextApi';
 import keyboardContext from '../preload/keyboard/KeyboardContextApi';
 // import { ipcRenderer } from 'electron';
 // import configStore from '../utils/ConfigStore'
 import { theme } from './Theme'
 // import padCommunication from '@common/PadComminucation'
-import Launchpad from '@renderer/utils/Launchpad'
+import Launchpad from '@common/Launchpad'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box'
@@ -28,7 +28,7 @@ import FormLabel from '@mui/material/FormLabel'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
-import { hasKeyCombo } from '@renderer/utils/StateUtil'
+import { hasKeyCombo } from '@common/StateUtil'
 // import { keyboard, Key } from '@nut-tree/nut-js'
 
 export interface SelectedButton {
@@ -87,12 +87,17 @@ export default class App extends React.Component<Record<string, never>, AppState
       if (padManagerInstance.online) {
           // console.log('padManagerInstance not undefined')
           //const launchpad = padManagerInstance.getLaunchpad(name)
-          this.setState({
-            padStatus: {
-              name: name,
-              preparing: true
-            }
-          })
+          const launchpad = padManagerInstance.getLaunchpad(name)
+          if (launchpad !== undefined) {
+            launchpad.getType().then((type) => {
+              this.setState({
+                padStatus: {
+                  name: type,
+                  preparing: true
+                }
+              })
+            })
+          }
           this.prepareInput(name)
           // if (launchpad !== undefined) {
           //     // console.log('launchpad not undefined')
@@ -154,11 +159,13 @@ export default class App extends React.Component<Record<string, never>, AppState
                     launchpad.setColor(section, state.x, state.y, Color.fromRgba(state.pressed ? state.activeColor : state.inactiveColor))
                   }
                 }
-                this.setState({
-                  padStatus: {
-                    name: launchpad.name,
-                    preparing: false
-                  }
+                launchpad.getType().then((type) => {
+                  this.setState({
+                    padStatus: {
+                      name: type,
+                      preparing: false
+                    }
+                  })
                 })
               }
             }, 5000, launchpad)

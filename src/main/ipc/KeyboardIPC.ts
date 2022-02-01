@@ -1,7 +1,7 @@
 import { Key, keyboard } from '@nut-tree/nut-js';
 import { Console } from 'console';
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-import { KeyCombo, KeyComboIPC, StateMappings } from '../../common/Interfaces';
+import { KeyCombo, KeyComboIPC, StateMappings } from '@common/Interfaces';
 import { default as configStore, ConfigStore } from '../ConfigStore';
 //import robotjs from 'robotjs'
 

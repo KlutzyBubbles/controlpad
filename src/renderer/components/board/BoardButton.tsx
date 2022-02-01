@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Color, RGB } from '../../../common/Color';
+import { Color, RGB } from '@common/Color';
 import { Section } from '../../Constants'
 
 export const enum BoardButtonType {

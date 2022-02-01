@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { KeyCombo, StateMappings } from '../../../common/Interfaces';
+import { KeyCombo, StateMappings } from '@common/Interfaces';
 import { SelectedButton } from '../App';
 import Stack from '@mui/material/Stack';
 import { Section } from '@renderer/Constants';

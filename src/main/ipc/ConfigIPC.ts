@@ -1,6 +1,6 @@
 import { Console } from 'console';
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
-import { StateMappings } from '../../common/Interfaces';
+import { StateMappings } from '@common/Interfaces';
 import { default as configStore, ConfigStore } from '../ConfigStore';
 
 const registerConfigIPC = () => {

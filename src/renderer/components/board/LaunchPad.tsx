@@ -2,7 +2,7 @@ import * as React from 'react'
 import {
   StateMappings,
   Mapping
-} from '../../../common/Interfaces'
+} from '@common/Interfaces'
 import {
   Section
 } from '../../Constants'

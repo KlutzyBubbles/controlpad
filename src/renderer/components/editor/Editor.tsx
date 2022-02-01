@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { KeyCombo, StateMappings } from '../../../common/Interfaces'
+import { KeyCombo, StateMappings } from '@common/Interfaces'
 import { sectionToString } from '../../Utils'
 import { SelectedButton } from '../App'
 import ColorEditor from './ColorEditor'
@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { RGB } from '../../../common/Color'
+import { RGB } from '@common/Color'
 import { Section } from '../../Constants'
 import KeyEditor from './KeyEditor'
 

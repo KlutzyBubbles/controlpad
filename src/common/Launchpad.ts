@@ -1,8 +1,8 @@
 import { Input, Output } from "webmidi";
-import { Color } from "../../common/Color";
-import { PresetColor, Section, LaunchpadTypes } from "../Constants";
-import { Mapping } from '../../common/Interfaces'
-import mappingJson from '../../mappings/mk2.json'
+import { Color } from "./Color";
+import { PresetColor, Section, LaunchpadTypes } from "../renderer/Constants";
+import { Mapping } from './Interfaces'
+import mappingJson from '../mappings/mk2.json'
 import { EventEmitter } from "events";
 
 const mapping: Mapping = <Mapping> mappingJson;
@@ -135,7 +135,9 @@ export default class Launchpad extends EventEmitter {
         }
     }
 
-    getType(): Promise<LaunchpadTypes> {
+    async getType(): Promise<LaunchpadTypes> {
+        if (this.type !== LaunchpadTypes.BLANK)
+            return this.type
         return new Promise((resolve) => {
             const listenerTimer = setTimeout(() => {
                 // console.log("removing");
@@ -150,21 +152,22 @@ export default class Launchpad extends EventEmitter {
                 clearTimeout(listenerTimer);
 
                 // console.log("removing");
-                // console.log(e);
+                console.log(typeof e);
+                console.log(e);
                 this.input.removeListener("sysex", () => {
                     // console.log('removed')
                 });
 
-                resolve(await this.nameentify(e));
+                resolve(await this.nameFromSysEx(e as unknown as MessageEvent<any>));
             });
 
             this.output.sendSysex([], [0x7e, 0x7f, 0x06, 0x01]);
         });
     }
 
-    async nameentify(e: any): Promise<LaunchpadTypes> {
-        if (e.data.length === 17) {
-            const msg = e.data.slice(1, e.data.length - 1);
+    async nameFromSysEx(event: MessageEvent): Promise<LaunchpadTypes> {
+        if (event.data.length === 17) {
+            const msg = event.data.slice(1, event.data.length - 1);
 
             if (msg[4] === 0x00 && msg[5] === 0x20 && msg[6] === 0x29) {
                 let type: LaunchpadTypes = LaunchpadTypes.BLANK;
@@ -196,7 +199,7 @@ export default class Launchpad extends EventEmitter {
                                 .reduce((p: string, c: number) => p + c, "")
                         );
 
-                        if (verNum < 171) type = await this.mk2_nameentify();
+                        if (verNum < 171) type = await this.mk2_nameFromSysEx();
                         else type = LaunchpadTypes.LPMK2;
                         break;
                     }
@@ -240,7 +243,7 @@ export default class Launchpad extends EventEmitter {
         return LaunchpadTypes.BLANK;
     }
 
-    mk2_nameentify(): Promise<LaunchpadTypes> {
+    mk2_nameFromSysEx(): Promise<LaunchpadTypes> {
         return new Promise((res) => {
             this.input.addListener("sysex", (e: any) => {
                 if (
