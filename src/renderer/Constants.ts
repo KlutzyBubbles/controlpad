@@ -20,6 +20,10 @@ export const enum PresetColor {
     LightGray = 2
 }
 
+/*
+BL = Bootloader
+CFW = Unknown (Possibly Custom Firmware)
+*/
 export const enum LaunchpadTypes {
     BL_LPX = "Launchpad X (BL)",
     BL_LPMINIMK3 = "Launchpad Mini MK3 (BL)",
