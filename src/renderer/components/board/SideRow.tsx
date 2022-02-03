@@ -4,7 +4,7 @@ import {
   StateMapping,
   RowMapping
 } from '@common/Interfaces'
-import { Section } from '../../../common/Constants'
+import { Section } from '@common/Constants'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface SideRowProps extends React.ClassAttributes<SideRow> {

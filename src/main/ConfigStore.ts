@@ -1,5 +1,5 @@
 import Store from 'electron-store'
-import { StateMappings } from '../common/Interfaces'
+import { StateMappings } from '@common/Interfaces'
 import fs from 'fs'
 
 export interface ConfigStore {
