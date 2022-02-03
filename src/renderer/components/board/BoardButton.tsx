@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Color, RGB } from '@common/Color';
-import { Section } from '../../../common/Constants'
+import { Section } from '@common/Constants'
 
 export const enum BoardButtonType {
   Circle = 0,

@@ -2,7 +2,7 @@ import * as React from 'react'
 import './less/App.less'
 import LaunchPad from './board/LaunchPad'
 import { StateMappings, StateMapping, StateMappingOptional, KeyCombo, Mapping } from '@common/Interfaces'
-import { Section, PresetColor } from '../../common/Constants'
+import { Section, PresetColor } from '@common/Constants'
 import Editor from './editor/Editor'
 import { Color, RGB } from '@common/Color'
 import { padManagerInstance } from '@common/PadManager'
@@ -11,13 +11,13 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { styled, ThemeProvider } from '@mui/material/styles';
-import configContext from '../preload/config/ConfigContextApi';
-import keyboardContext from '../preload/keyboard/KeyboardContextApi';
+import configContext from '@preload/config/ConfigContextApi';
+import keyboardContext from '@preload/keyboard/KeyboardContextApi';
 import { theme } from './Theme';
 import Launchpad from '@common/Launchpad';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
-import { hasKeyCombo } from '@common/StateUtil';
+import { hasKeyCombo } from '@common/Utils';
 
 export interface SelectedButton {
   section: Section,

@@ -5,7 +5,7 @@ import {
 } from '@common/Interfaces'
 import {
   Section
-} from '../../../common/Constants'
+} from '@common/Constants'
 import TowRow from './TopRow'
 import MainBoard from './MainBoard'
 import SideRow from './SideRow'

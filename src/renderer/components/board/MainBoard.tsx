@@ -1,10 +1,10 @@
-import { hasKeyCombo } from '@common/StateUtil'
+import { hasKeyCombo } from '@common/Utils'
 import * as React from 'react'
 import {
   StateMapping,
   RowMapping
 } from '@common/Interfaces'
-import { Section } from '../../../common/Constants'
+import { Section } from '@common/Constants'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface MainBoardProps extends React.ClassAttributes<MainBoard> {

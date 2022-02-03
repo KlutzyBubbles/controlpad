@@ -25,6 +25,7 @@
           ["@common", "./src/common"],
           ["@main", "./src/main"],
           ["@src", "./src"],
+          ["@preload", "./src/renderer/preload"],
           ["@assets", "./assets"]
         ],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { KeyCombo, StateMappings } from '@common/Interfaces'
-import { sectionToString } from '../../Utils'
-import { SelectedButton } from '../App'
+import { sectionToString } from '@common/Utils'
+import { SelectedButton } from '@renderer/components/App'
 import ColorEditor from './ColorEditor'
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { RGB } from '@common/Color'
-import { Section } from '../../../common/Constants'
+import { Section } from '@common/Constants'
 import KeyEditor from './KeyEditor'
 
 export const enum BoardButtonType {

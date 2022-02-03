@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Color, RGB } from '@common/Color';
 import { StateMappings } from '@common/Interfaces';
-import { SelectedButton } from '../App';
+import { SelectedButton } from '@renderer/components/App';
 import { Color as MUIColor, ColorPicker, createColor, ColorFormat } from "mui-color";
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';

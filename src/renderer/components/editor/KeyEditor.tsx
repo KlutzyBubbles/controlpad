@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { KeyCombo, StateMappings } from '@common/Interfaces';
-import { SelectedButton } from '../App';
+import { SelectedButton } from '@renderer/components/App';
 import Stack from '@mui/material/Stack';
 import { Section } from '@common/Constants';
 import TextField from '@mui/material/TextField';

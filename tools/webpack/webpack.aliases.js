@@ -6,5 +6,6 @@ module.exports = createWebpackAliases({
   '@common': 'src/common',
   '@main': 'src/main',
   '@renderer': 'src/renderer',
+  '@preload': 'src/renderer/preload',
   '@src': 'src',
 });
