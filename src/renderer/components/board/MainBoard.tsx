@@ -4,11 +4,11 @@ import {
   StateMapping,
   RowMapping
 } from '@common/Interfaces'
-import { Section } from '../../Constants'
+import { Section } from '../../../common/Constants'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface MainBoardProps extends React.ClassAttributes<MainBoard> {
-  mainMapping: RowMapping[]
+  mainMapping?: RowMapping[]
   mainMappingStates: StateMapping[]
   selectButton: (section?: Section, x?: number, y?: number) => void
 }

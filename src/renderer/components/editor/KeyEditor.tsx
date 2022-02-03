@@ -2,7 +2,7 @@ import * as React from 'react'
 import { KeyCombo, StateMappings } from '@common/Interfaces';
 import { SelectedButton } from '../App';
 import Stack from '@mui/material/Stack';
-import { Section } from '@renderer/Constants';
+import { Section } from '@common/Constants';
 import keycode from 'keycode';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';

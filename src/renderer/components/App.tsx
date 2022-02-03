@@ -2,9 +2,8 @@ import * as React from 'react'
 import './less/App.less'
 // import './Application.less'
 import LaunchPad from './board/LaunchPad'
-import mapping from '../../mappings/mk2.json'
-import { StateMappings, StateMapping, StateMappingOptional, KeyCombo } from '@common/Interfaces'
-import { Section, PresetColor } from '../Constants'
+import { StateMappings, StateMapping, StateMappingOptional, KeyCombo, Mapping } from '@common/Interfaces'
+import { Section, PresetColor } from '../../common/Constants'
 import Editor from './editor/Editor'
 import { Color, RGB } from '@common/Color'
 import { padManagerInstance } from '@common/PadManager'
@@ -39,7 +38,9 @@ export interface SelectedButton {
 
 interface PadStatus {
   preparing: boolean,
-  name: string
+  displayName: string,
+  name: string,
+  mapping: Mapping
 }
 
 interface AppState {
@@ -89,6 +90,14 @@ export default class App extends React.Component<Record<string, never>, AppState
           //const launchpad = padManagerInstance.getLaunchpad(name)
           const launchpad = padManagerInstance.getLaunchpad(name)
           if (launchpad !== undefined) {
+            // this.setState({
+            //   padStatus: {
+            //     name: LaunchpadTypes.BLANK,
+            //     preparing: true
+            //   }
+            // })
+            this.prepareInput(name)
+            /*
             launchpad.getType().then((type) => {
               this.setState({
                 padStatus: {
@@ -96,9 +105,10 @@ export default class App extends React.Component<Record<string, never>, AppState
                   preparing: true
                 }
               })
+              this.prepareInput(name)
             })
+            */
           }
-          this.prepareInput(name)
           // if (launchpad !== undefined) {
           //     // console.log('launchpad not undefined')
           //     for (const sectionName in stateMappings) {
@@ -151,6 +161,24 @@ export default class App extends React.Component<Record<string, never>, AppState
       if (padManagerInstance.online) {
           const launchpad = padManagerInstance.getLaunchpad(name)
           if (launchpad !== undefined) {
+            const listenerTimer = setTimeout(() => {
+              // console.log('setTimeout')
+              if (launchpad !== undefined) {
+                // console.log('not undefined')
+                this.initiateLaunchpad(launchpad)
+              }
+            }, 5000)
+            launchpad.once('type', () => {
+              // console.log('once type')
+              clearTimeout(listenerTimer);
+              if (launchpad !== undefined) {
+                // console.log('not undefined')
+                this.initiateLaunchpad(launchpad)
+                // console.log('has type', type)
+              }
+            });
+            launchpad.getType()
+            /*
             setTimeout((launchpad) => {
               if (launchpad !== undefined) {
                 for (const sectionName in this.state.stateMappings) {
@@ -169,6 +197,7 @@ export default class App extends React.Component<Record<string, never>, AppState
                 })
               }
             }, 5000, launchpad)
+            */
               launchpad.on('pressed', (location, name) => {
                   this.pressed(location, name)
               })
@@ -177,6 +206,32 @@ export default class App extends React.Component<Record<string, never>, AppState
               })
           }
       }
+  }
+
+  initiateLaunchpad(launchpad: Launchpad) {
+    this.initiateAllColors(launchpad)
+    launchpad.getDisplayName().then((name) => {
+      // console.log('get type', type)
+      launchpad.getTypeMappings().then((mapping) => {
+        this.setState({
+          padStatus: {
+            displayName: name,
+            name: launchpad.name,
+            preparing: false,
+            mapping: mapping
+          }
+        })
+      })
+    })
+  }
+
+  initiateAllColors(launchpad: Launchpad) {
+    for (const sectionName in this.state.stateMappings) {
+      const section = parseInt(sectionName)
+      for (const state of this.state.stateMappings[sectionName]) {
+        launchpad.setColor(section, state.x, state.y, Color.fromRgba(state.pressed ? state.activeColor : state.inactiveColor))
+      }
+    }
   }
 
   pressed(location: number[], name: string) {
@@ -315,7 +370,7 @@ export default class App extends React.Component<Record<string, never>, AppState
   //Partial<AppState>
   //Pick<AppState, keyof AppState>
   //Omit<AppState, keyof AppState>
-  changeState = (state: AppState, section: Section, x: number, y: number, newState: StateMappingOptional): Omit<AppState, keyof AppState> => {
+  changeState = (state: AppState, section: Section, x: number, y: number, newState: StateMappingOptional, override = false): Omit<AppState, keyof AppState> => {
     if (!Object.prototype.hasOwnProperty.call(state.stateMappings, section))
       state.stateMappings[section] = []
     let index = -1;
@@ -346,7 +401,8 @@ export default class App extends React.Component<Record<string, never>, AppState
       changed = !equal(oldObject, newObject)
       mappings[section].push(newObject)
     } else {
-      oldObject = state.stateMappings[section][index]
+      if (!override)
+        oldObject = state.stateMappings[section][index]
       newObject = {...oldObject, ...newState}
       changed = !equal(oldObject, newObject)
       mappings[section][index] = newObject
@@ -435,6 +491,11 @@ export default class App extends React.Component<Record<string, never>, AppState
     }) as AppState)
   }
 
+  clearAll = (section: Section, x: number, y: number) => {
+    console.log('clearAll app')
+    this.setState(this.changeState(this.state, section, x, y, {}, true) as AppState)
+  }
+
   public render (): JSX.Element {
     const Item = styled(Paper)(({ theme }) => ({
       ...theme.typography.body2,
@@ -446,14 +507,14 @@ export default class App extends React.Component<Record<string, never>, AppState
         <Typography sx={{ mt: 2 }} variant="h4" gutterBottom component="div" align="center">
             ControlPad
         </Typography>
-        <Chip sx={{ position: 'absolute', top: 10, right: 10 }} label={this.state.padStatus ? this.state.padStatus.name : 'Disconnected'} color={this.state.padStatus ? this.state.padStatus.preparing ? 'warning' : 'success' : 'error'} variant="outlined" />
+        <Chip sx={{ position: 'absolute', top: 10, right: 10 }} label={this.state.padStatus ? this.state.padStatus.name : 'Disconnected'} color={this.state.padStatus ? (this.state.padStatus.preparing ? 'warning' : 'success') : 'error'} variant="outlined" />
         <Container>
           <Grid container spacing={3} alignItems="stretch">
             <Grid item xs="auto">
               <LaunchPad
                 selectButton={this.selectButton}
                 stateMappings={this.state.stateMappings}
-                mapping={mapping}
+                mapping={this.state.padStatus?.mapping}
               />
             </Grid>
               <Grid item xs={12} sm>
@@ -461,6 +522,7 @@ export default class App extends React.Component<Record<string, never>, AppState
                   changeColor={this.changeColor}
                   changeName={this.changeName}
                   changeKeyCombo={this.changeKeyCombo}
+                  clearAll={this.clearAll}
                   selectedButton={this.state.selected}
                   stateMappings={this.state.stateMappings}
                 />

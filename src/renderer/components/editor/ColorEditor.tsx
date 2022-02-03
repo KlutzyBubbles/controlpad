@@ -6,7 +6,7 @@ import { Color as MUIColor, ColorPicker, createColor, ColorFormat } from "mui-co
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
-import { Section } from '@renderer/Constants';
+import { Section } from '@common/Constants';
 
 interface ColorEditorProps {
     selectedButton: SelectedButton

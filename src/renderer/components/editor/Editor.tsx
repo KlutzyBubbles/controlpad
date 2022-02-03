@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { RGB } from '@common/Color'
-import { Section } from '../../Constants'
+import { Section } from '../../../common/Constants'
 import KeyEditor from './KeyEditor'
 
 export const enum BoardButtonType {
@@ -27,6 +27,7 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
     changeColor: (section: Section, x: number, y: number, color: RGB, active: boolean) => void
     changeName: (section: Section, x: number, y: number, name: string) => void
     changeKeyCombo: (section: Section, x: number, y: number, combo: KeyCombo) => void
+    clearAll: (section: Section, x: number, y: number) => void
     stateMappings: StateMappings
 }
 
@@ -44,6 +45,11 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
         if (this.props.selectedButton === undefined)
             return
         this.props.changeName(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, event.target.value)
+    }
+
+    handleClearAllClick = () => {
+        console.log('handleClearAllClick')
+        this.props.clearAll(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y)
     }
 
     getName = () => {
@@ -79,7 +85,7 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
                         <Typography variant="h6" gutterBottom component="div">
                             {this.props.selectedButton !== undefined ? `Edit Key in ${sectionToString(this.props.selectedButton.section)}, (${this.props.selectedButton.x}, ${this.props.selectedButton.y})` : 'No Button Selected'}
                         </Typography>
-                        <Button variant="outlined">Clear All</Button>
+                        <Button variant="outlined" onClick={this.handleClearAllClick}>Clear All</Button>
                     </Stack>
                     <Stack
                         direction="column"

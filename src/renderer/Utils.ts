@@ -1,4 +1,4 @@
-import { Section } from "./Constants";
+import { Section } from "../common/Constants";
 
 export function sectionToString(section: Section) {
     switch(section) {

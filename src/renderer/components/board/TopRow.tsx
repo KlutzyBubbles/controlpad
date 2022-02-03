@@ -4,7 +4,7 @@ import {
   StateMapping,
   RowMapping
 } from '@common/Interfaces'
-import { Section } from '../../Constants'
+import { Section } from '../../../common/Constants'
 import BoardButton, { BoardButtonType } from './BoardButton'
 
 interface TopRowProps extends React.ClassAttributes<TopRow> {

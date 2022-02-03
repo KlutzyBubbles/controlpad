@@ -54,13 +54,13 @@ export interface GridMapping {
 }
 
 export interface Mapping {
-  sysExSequence: number[]
-  pressedState: number[]
-  topRow: RowMapping
-  sideColumn: RowMapping
-  centerRows: RowMapping[]
-  buttonMappings: AnyKey
-  gridMappings: GridMapping
+  name: string
+  sysExSequence?: number[]
+  pressedState?: number[]
+  topRow?: RowMapping
+  sideColumn?: RowMapping
+  centerRows?: RowMapping[]
+  gridMappings?: GridMapping
 }
 
 export interface KeyCombo {

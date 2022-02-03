@@ -10,26 +10,22 @@ export interface ConfigStore {
 const configStore = new Store<ConfigStore>()
 export default configStore
 
-export async function saveToFile(filePath: string): Promise<void> {
-    // console.log('NOT IMPLEMENTED YET', filePath)
-    console.log('saveToFile')
-    const stateMappings = configStore.get('stateMappings')
-    fs.writeFile(filePath, JSON.stringify(stateMappings), 'utf8', (arg) => {
-        console.log(arg)
-    });
-    return
+export function saveToFile(filePath: string): void {
+    try {
+        const stateMappings = configStore.get('stateMappings')
+        fs.writeFileSync(filePath, JSON.stringify(stateMappings), 'utf8');
+    } catch (e) {
+        console.error('Failed saving file', e)
+    }
 }
 
-export async function loadFromFile(filePath: string): Promise<StateMappings> {
-    //console.log('NOT IMPLEMENTED YET', filePath)
-    console.log('loadFromFile')
-    const data = fs.readFileSync(filePath, 'utf8')
-    const loadedMappings: StateMappings = JSON.parse(data);
-    //configStore.set('stateMappings', loadedMappings);
-    // loadListeners.forEach((func) => {
-    //     console.log('call func')
-    //     func(loadedMappings)
-    // })
-    // ipcMain.send()
-    return loadedMappings
+export function loadFromFile(filePath: string): StateMappings | undefined {
+    try {
+        const data = fs.readFileSync(filePath, 'utf8')
+        const loadedMappings: StateMappings = JSON.parse(data);
+        return loadedMappings
+    } catch (e) {
+        console.error('Failed saving file', e)
+        return undefined
+    }
 }

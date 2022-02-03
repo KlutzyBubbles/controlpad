@@ -5,13 +5,13 @@ import {
 } from '@common/Interfaces'
 import {
   Section
-} from '../../Constants'
+} from '../../../common/Constants'
 import TowRow from './TopRow'
 import MainBoard from './MainBoard'
 import SideRow from './SideRow'
 
 export interface LaunchPadProps extends React.ClassAttributes<LaunchPad> {
-  mapping: Mapping
+  mapping?: Mapping
   selectButton: (section?: Section, x?: number, y?: number) => void
   stateMappings: StateMappings
 }
@@ -45,6 +45,8 @@ export default class LaunchPad extends React.Component< LaunchPadProps, State > 
       classes.push('offline')
     }
 
+    if (this.props.mapping === undefined)
+      return (<React.Fragment></React.Fragment>)
     return (
       <div
         className={classes.join(' ')}
