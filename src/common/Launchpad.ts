@@ -36,16 +36,15 @@ export default class Launchpad extends EventEmitter {
 
     midiMessage = async (event: any) => {
         const data = event.message.data;
-        if (data === undefined || data === null || data.length !== 3) {
+        if (data === undefined || data === null) {
             console.error(`Invalid data received from ${this.name}`);
             return;
         }
-        // console.log(`midimessage ${data}`)
-        const codes = await this.getMessageCodes(data[0], data[1])
-        if (codes === undefined) {
-            console.error(`Invalid data received from ${this.name}, Data: ${data}, Codes: ${codes}`);
+        if (data.length !== 3)
             return;
-        }
+        const codes = await this.getMessageCodes(data[0], data[1])
+        if (codes === undefined)
+            return;
         const mapping = await this.getTypeMappings()
         if (data[2] === mapping.pressedState[0]) {
             this.emit('released', codes, this.name)
@@ -57,7 +56,6 @@ export default class Launchpad extends EventEmitter {
     }
 
     async getMessageCodes(item1: number, item2: number): Promise<number[] | undefined> {
-        // console.log(`getMessageCodes(${item1}, ${item2})`)
         const mapping = await this.getTypeMappings()
         for (const sectionName in mapping.gridMappings) {
             let currentSection = -1
@@ -72,15 +70,10 @@ export default class Launchpad extends EventEmitter {
     }
 
     async getButtonCombo(section: Section, x: number, y: number): Promise<(number | undefined)[]> {
-        // console.log('getButtonCombo')
         return [await this.getSectionNumber(section), await this.getButtonNumber(section, x, y)]
     }
 
     async getButtonNumber(section: Section, x: number, y: number): Promise<number | undefined> {
-        // console.log(`getButtonNumber(${section}, ${x}, ${y})`)
-        // console.log('getButtonNumber')
-        // console.log(mapping.gridMappings[section])
-        // console.log(section)
         const mapping = await this.getTypeMappings()
         for (const item of mapping.gridMappings[section]) {
             if (item.x === x && item.y === y)
@@ -120,7 +113,6 @@ export default class Launchpad extends EventEmitter {
     }
 
     async setColor(section: Section, x: number, y: number, color: Color) {
-        //console.log('setColor')
         const mapping = await this.getTypeMappings()
         const buttonNumber = await this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
@@ -137,7 +129,6 @@ export default class Launchpad extends EventEmitter {
     }
 
     async startFlash(section: Section, x: number, y: number, color: PresetColor) {
-        //console.log('startFlash')
         const mapping = await this.getTypeMappings()
         const buttonNumber = await this.getButtonNumber(section, x, y)
         if (buttonNumber === undefined)
@@ -162,9 +153,7 @@ export default class Launchpad extends EventEmitter {
         }
         return new Promise((resolve) => {
             const listenerTimer = setTimeout(() => {
-                // console.log("removing");
                 this.input.removeListener("sysex", () => {
-                    // console.log('removed')
                 });
                 this.type = LaunchpadType.BLANK;
                 this.emit('type', this.type)
@@ -174,12 +163,7 @@ export default class Launchpad extends EventEmitter {
             this.input.addListener("sysex", async (event: MessageEvent) => {
                 clearTimeout(listenerTimer);
 
-                // console.log("removing");
-                // console.log('getType');
-                // console.log(event);
-                this.input.removeListener("sysex", () => {
-                    // console.log('removed')
-                });
+                this.input.removeListener("sysex", () => {});
 
                 const type = await this.nameFromSysEx(event)
                 this.emit('type', type)
@@ -190,8 +174,6 @@ export default class Launchpad extends EventEmitter {
     }
 
     async nameFromSysEx(event: MessageEvent): Promise<LaunchpadType> {
-        console.log('nameFromSysEx')
-        console.log(event);
         const eventData = event.message.data;
         if (eventData.length === 17) {
             const msg = eventData.slice(1, eventData.length - 1);
@@ -225,8 +207,6 @@ export default class Launchpad extends EventEmitter {
                                 .slice(msg.length - 3)
                                 .reduce((p: string, c: number) => p + c, "")
                         );
-                        console.log('MK2 Identified')
-                        console.log(verNum)
                         if (verNum < 171) type = await this.mk2_nameFromSysEx();
                         else type = LaunchpadType.MK2;
                         break;
@@ -265,8 +245,6 @@ export default class Launchpad extends EventEmitter {
         return new Promise((res) => {
             this.input.addListener("sysex", (event: MessageEvent) => {
                 const eventData = event.message.data;
-                console.log('mk2_nameFromSysEx');
-                console.log(event);
                 if (
                     eventData.length === 19 &&
                     [0, 0x20, 0x29, 0].reduce(
@@ -279,10 +257,7 @@ export default class Launchpad extends EventEmitter {
                         eventData.slice(13, 16).reduce((s: any, el: any) => s + el, "")
                     );
 
-                    //console.log("removing");
-                    this.input.removeListener("sysex", () => {
-                        //console.log('removed')
-                    });
+                    this.input.removeListener("sysex", () => {});
 
                     if (versionNum < 171) res(LaunchpadType.MK2);
                     else res(LaunchpadType.BL_MK2);

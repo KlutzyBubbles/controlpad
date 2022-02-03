@@ -30,15 +30,6 @@ export default class LaunchPad extends React.Component< LaunchPadProps, State > 
   }
 
   public render (): React.ReactNode {
-    // console.log('%%% LaunchPad %%%')
-    // console.log('colorMapping')
-    // console.log(this.props.stateMappings)
-    // console.log('has Main')
-    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Main))
-    // console.log('has Top')
-    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Top))
-    // console.log('has Side')
-    // console.log(Object.prototype.hasOwnProperty.call(this.props.stateMappings, Section.Side))
 
     const classes = ['launchpad']
     if (!this.state.isOnline) {

@@ -3,10 +3,6 @@ import path from 'path';
 import { registerTitlebarIpc } from '@main/ipc/TitlebarIPC';
 import registerConfigIPC from './ipc/ConfigIPC';
 import registerKeyboardIPC from './ipc/KeyboardIPC';
-//import configStore from './ConfigStore';
-//import { padManagerInstance } from '@renderer/utils/PadManager';
-//import { Color } from '@common/Color';
-//import { Console } from 'console';
 
 declare const APP_WINDOW_WEBPACK_ENTRY: string;
 declare const APP_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -57,25 +53,6 @@ export function createAppWindow(): BrowserWindow {
 
     appWindow.on('ready-to-show', () => {
         appWindow.show()
-        
-        // const stateMappings = configStore.get('stateMappings')
-        // console.log('ready to shopw')
-        // console.log(stateMappings)
-        // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-        //     // console.log('padManagerInstance not undefined')
-        //     const launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-        //     if (launchpad !== undefined) {
-        //     // console.log('launchpad not undefined')
-        //     for (const sectionName in stateMappings) {
-        //         // console.log(`refreshBoardState 0 ${sectionName}`)
-        //         const section = parseInt(sectionName)
-        //         for (const state of stateMappings[sectionName]) {
-        //         // console.log(`refreshBoardState 1 ${section}`)
-        //         launchpad.setColor(section, state.x, state.y, Color.fromRgba(state.pressed ? state.activeColor : state.inactiveColor))
-        //         }
-        //     }
-        //     }
-        // }
     });
 
     registerMainIPC();

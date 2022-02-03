@@ -1,6 +1,5 @@
 import Store from 'electron-store'
 import { StateMappings } from '../common/Interfaces'
-import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import fs from 'fs'
 
 export interface ConfigStore {

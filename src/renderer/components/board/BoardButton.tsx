@@ -27,10 +27,6 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
 export default class BoardButton extends React.Component<BoardButtonProps, Record<string, never>> {
   constructor (props: BoardButtonProps) {
     super(props)
-    // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-    //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-    //   launchpad?.setColor(this.props.section, this.props.x, this.props.y, Color.fromRgb6(this.props.inactiveColor))
-    // }
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -40,20 +36,6 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
     } else {
       this.props.selectButton(this.props.x, this.props.y)
     }
-    // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-    //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-    //   launchpad?.startFlash(this.props.section, this.props.x, this.props.y, PresetColor.White)
-    // }
-    // if (padManagerInstance.online && padManagerInstance.selectedDevice !== undefined) {
-    //   var launchpad = padManagerInstance.getLaunchpad(padManagerInstance.selectedDevice)
-    //   var color = Color.random()
-    //   console.log(color)
-    //   console.log(color.toHex())
-    //   launchpad?.setColor(this.props.section, this.props.x, this.props.y, color)
-    //   this.setState({
-    //     color: color
-    //   })
-    // }
   }
 
   public render (): JSX.Element {
@@ -66,23 +48,6 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
     }
 
     let buttonColor = this.props.pressed ? Color.fromRgba(this.props.activeColor).toHex() : Color.fromRgba(this.props.inactiveColor).toHex()
-    if (this.props.x === 8 && this.props.y === 1 && this.props.section === Section.Main) {
-      // console.log(this.props.pressed)
-      // console.log(this.props.inactiveColor)
-      // console.log(this.props.activeColor)
-      // console.log(buttonColor)
-    }
-
-    /*
-    // radial-gradient(#85FF00, #61942A)
-    let finalButtonColor = '#7D8386'
-    if (buttonColor !== '#000000')
-      finalButtonColor = `radial-gradient(${buttonColor}, ${Color.lightenDarkenColor(buttonColor, -0.50)})`
-    const styles = {
-      "background": finalButtonColor,
-      "borderColor": this.props.pressed ? "#fff" : this.props.editing ? "#ff00ef" : 'rgba(0,0,0,0)'
-    }
-    */
 
     if (buttonColor === '#000000')
       buttonColor = '#7D8386';

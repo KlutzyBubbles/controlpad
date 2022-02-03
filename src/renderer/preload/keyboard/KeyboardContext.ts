@@ -3,7 +3,6 @@ import { ipcRenderer } from 'electron';
 
 const keyboardContext = {
   runKeyCombo(event: KeyComboIPC) {
-    // console.log('savemappings', event)
     ipcRenderer.invoke('run-key-combo', event);
   }
 };

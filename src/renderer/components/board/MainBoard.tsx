@@ -48,16 +48,12 @@ export default class MainBoard extends React.Component<MainBoardProps> {
 
   public render (): JSX.Element {
     const rows: JSX.Element[] = []
-    // console.log('mainMappingStates')
-    // console.log(this.props.mainMappingStates)
     let yCount = 8;
     for (const rowMapping of this.props.mainMapping) {
       const buttons: JSX.Element[] = []
       let xCount = 1;
       for (const id of rowMapping.two) {
         const stateMapping = this.getStateMapping(xCount, yCount)
-        // console.log('mainMappingStates stateMapping')
-        // console.log(stateMapping)
         buttons.push(
           <BoardButton
             key={`${xCount},${yCount}`}

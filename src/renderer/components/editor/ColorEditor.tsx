@@ -56,14 +56,6 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
         }, ...this.refreshColors(true)}
     }
 
-    // handleActiveClose = () => {
-    //     this.setState({ displayActivePicker: false })
-    // };
-
-    // handleInactiveClose = () => {
-    //     this.setState({ displayInactivePicker: false })
-    // };
-
     handleActiveChange = (color: MUIColor, radio = false) => {
         this.setState({
             activeColor: color
@@ -73,9 +65,7 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                 selectedActiveColor: PresetColor.None
             })
         }
-        // this.state.activeColor = color
         if (this.props.selectedButton !== undefined) {
-            // console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.fromRgbArray(color.rgb).toRgb8(), true)
         }
     };
@@ -85,44 +75,19 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
             inactiveColor: color
         })
         if (!radio) {
-            // console.log(radio)
             this.setState({
                 selectedInactiveColor: PresetColor.None
             })
         }
-        //this.state.inactiveColor = color
         if (this.props.selectedButton !== undefined) {
-            // console.log("change", color, Color.fromRgbArray(color.rgb).toRgb6());
             this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.fromRgbArray(color.rgb).toRgb8(), false)
         }
     };
 
-    /*
-    handleActiveChange = (color: ColorResult) => {
-        if (this.props.selectedButton !== undefined)
-            this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.toRgb6(color.rgb), true)
-    };
-
-    handleInactiveChange = (color: ColorResult) => {
-        if (this.props.selectedButton !== undefined)
-            this.props.changeColor(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, Color.toRgb6(color.rgb), false)
-    };
-*
-    handleChange = (newValue: MUIColor) => {
-        // console.log("change", newValue);
-        // setColor(`#${newValue.hex}`);
-        // this.setState({
-        //     color: newValue
-        // });
-        // action('changed')(newValue);
-    };*/
-
     refreshColors(init = false) {
         if (!Object.prototype.hasOwnProperty.call(this.props.stateMappings, this.props.selectedButton.section))
             this.props.stateMappings[this.props.selectedButton.section] = []
-        // console.log(this.props.stateMappings[this.props.selectedButton.section])
         if (init || this.state.currentSelected !== undefined && this.props.selectedButton != this.state.currentSelected) {
-            // console.log('refreshColors')
             for (const state of this.props.stateMappings[this.props.selectedButton.section]) {
                 if (state.x === this.props.selectedButton.x && state.y === this.props.selectedButton.y) {
                     if (init) {
@@ -142,8 +107,6 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
                             selectedActiveColor: PresetColor.None
                         })
                     }
-                    // this.activeColor = createColor(Color.fromRgb6(state.activeColor).toRgb8(), "rgb" as any as ColorFormat)
-                    // this.inactiveColor = createColor(Color.fromRgb6(state.inactiveColor).toRgb8(), "rgb" as any as ColorFormat)
                 }
             }
         }
@@ -200,7 +163,6 @@ export default class ColorEditor extends React.Component<ColorEditorProps, Color
 
     public render(): JSX.Element {
         this.refreshColors()
-        // console.log(this.state.inactiveColor)
         return (
             <Stack
                 direction="column"

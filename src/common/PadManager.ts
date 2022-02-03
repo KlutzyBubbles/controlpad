@@ -24,26 +24,16 @@ export class PadManager extends EventEmitter {
 
     midiInit(error?: Error | string, callback?: (error?: Error | string) => void) {
         if (error) {
-            console.error('Error initiating WebMidi')
-            console.error(error)
+            console.error('Error initiating WebMidi', error)
             this.online = false
             if (typeof callback === "function") callback('Error initiating WebMidi')
         }
-        // console.log(error)
-        // console.log(this)
-        // console.log(this.scan)
         this.online = true
         this.scan()
         WebMidi.addListener("connected", (e: PortEvent) => {
-            console.log(e)
-            console.log(e.port.name)
-            //this.addLaunchpad(e.port._midiOutput.name)
             this.addLaunchpad(e.port.name)
         });
         WebMidi.addListener("disconnected", (e: PortEvent) => {
-            console.log(e)
-            console.log(e.port.name)
-            //this.removeLaunchpad(e.port._midiOutput.name)
             this.addLaunchpad(e.port.name)
         });
         if (typeof callback === "function") callback()
@@ -68,7 +58,6 @@ export class PadManager extends EventEmitter {
     }
 
     addLaunchpad(name: string) {
-        //console.log('addLaunchpad')
         if (this.hasLaunchpad(name))
             return
         if (this.selectedDevice == undefined)
@@ -106,14 +95,6 @@ export class PadManager extends EventEmitter {
         for (const input of WebMidi.inputs) {
             for (const output of WebMidi.outputs) {
                 if (this.portsMatch(input.name, output.name)) {
-                    // console.log('output.name')
-                    // console.log(output.name)
-                    // console.log('input.name')
-                    // console.log(input.name)
-                    // console.log('output.name')
-                    // console.log(output.name)
-                    // console.log('input.name')
-                    // console.log(input.name)
                     this.addLaunchpad(input.name)
                 }
             }

@@ -38,17 +38,12 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
     }
 
     handleTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        // console.log(event.target.value)
-        // this.setState({
-        //     name: event.target.value
-        // })
         if (this.props.selectedButton === undefined)
             return
         this.props.changeName(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y, event.target.value)
     }
 
     handleClearAllClick = () => {
-        console.log('handleClearAllClick')
         this.props.clearAll(this.props.selectedButton.section, this.props.selectedButton.x, this.props.selectedButton.y)
     }
 
@@ -70,12 +65,6 @@ export default class BoardButton extends React.Component<BoardButtonProps, Recor
         return (
             <Paper elevation={0} sx={{ height: "100%", pt: 2 }}>
                 <Container>
-                    {/*
-                    <Typography variant="h6" gutterBottom component="div">
-                        {this.props.selectedButton !== undefined ? `Edit Key in ${sectionToString(this.props.selectedButton.section)}, (${this.props.selectedButton.x}, ${this.props.selectedButton.y})` : 'No Button Selected'}
-                    </Typography>
-                    <Button variant="outlined">Clear All</Button>
-                    */}
                     <Stack
                         direction="row"
                         justifyContent="space-between"

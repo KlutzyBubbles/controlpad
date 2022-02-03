@@ -20,22 +20,6 @@ export const enum LaunchpadType {
     CONNECTING = 6,
 }
 
-/*
-export const enum LaunchpadTypes {
-    BL_LPX = "Launchpad X (BL)",
-    BL_LPMINIMK3 = "Launchpad Mini MK3 (BL)",
-    BL_LPPROMK3 = "Launchpad Pro MK3 (BL)",
-    BL_LPMK2 = "Launchpad MK2 (BL)",
-    BL_LPPRO = "Launchpad Pro (BL)",
-    LPX = "Launchpad X",
-    LPMINIMK3 = "Launchpad Mini MK3",
-    LPPROMK3 = "Launchpad Pro MK3",
-    LPMK2 = "Launchpad MK2",
-    LPPRO = "Launchpad Pro",
-    BLANK = "BLANK",
-}
-*/
-
 export const typeMappings: Mapping[] = [
     {
         name: "Launchpad X (BL)",

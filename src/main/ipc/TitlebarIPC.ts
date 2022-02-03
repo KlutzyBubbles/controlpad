@@ -65,7 +65,6 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
       console.log('Config was not saved due to being cancelled')
     } else {
       saveToFile(result.filePath)
-      // console.error('Not implemented yet')
     }
   });
 
@@ -89,10 +88,8 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
       return undefined
     } else {
       const mappings = await loadFromFile(result.filePaths[0])
-      console.log(mappings)
       mainWindow.webContents.send('state-mapping-load', mappings)
       return mappings
-      // console.error('Not implemented yet')
     }
   });
 
