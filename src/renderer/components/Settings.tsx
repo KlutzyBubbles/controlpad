@@ -1,25 +1,25 @@
-import * as React from 'react'
+import * as React from 'react';
 
 interface SettingsProps extends React.ClassAttributes<Settings> {
-  locale: string
-  onSelectLocale?: (locale: string, loaded?: () => void) => void
-  isLogVisible: boolean
-  replayFilename?: string
-  onToggleLog: () => void
-  onClose?: () => void
+  locale: string;
+  onSelectLocale?: (locale: string, loaded?: () => void) => void;
+  isLogVisible: boolean;
+  replayFilename?: string;
+  onToggleLog: () => void;
+  onClose?: () => void;
 }
 
 export default class Settings extends React.Component<SettingsProps> {
-  protected downloadXML (): void {
-    console.error('NOT IMPLEMENTED')
+  protected downloadXML(): void {
+    console.error('NOT IMPLEMENTED');
   }
 
-  public render (): JSX.Element {
-    const release = CONTROLPAD_RELEASE
+  public render(): JSX.Element {
+    const release = CONTROLPAD_RELEASE;
 
     return (
       <div className='controlpad-scrubber-settings'>
-        {(this.props.onClose !== undefined) && (
+        {this.props.onClose !== undefined && (
           <header>
             <span>Settings</span>
             <a title='Close' onClick={this.props.onClose.bind(null)}>
@@ -45,19 +45,21 @@ export default class Settings extends React.Component<SettingsProps> {
         <footer>
           <a
             href='https://github.com/HearthSim/Controlpad/issues'
-            target='_blank' rel='noreferrer'
+            target='_blank'
+            rel='noreferrer'
           >
             Report Issue
           </a>
           <a
             href='https://hearthsim.info/controlpad/'
             target='_blank'
-            title={`Controlpad ${release}`} rel='noreferrer'
+            title={`Controlpad ${release}`}
+            rel='noreferrer'
           >
             About
           </a>
         </footer>
       </div>
-    )
+    );
   }
 }

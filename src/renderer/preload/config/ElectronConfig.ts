@@ -4,4 +4,4 @@ const electronConfig = {
   config: configContext,
 }
 
-export default electronConfig
+export default electronConfig;

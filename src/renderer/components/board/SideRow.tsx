@@ -1,36 +1,32 @@
-import { hasKeyCombo } from '@common/Utils'
-import * as React from 'react'
-import {
-  StateMapping,
-  RowMapping
-} from '@common/Interfaces'
-import { Section } from '@common/Constants'
-import BoardButton, { BoardButtonType } from './BoardButton'
+import { hasKeyCombo } from '@common/Utils';
+import * as React from 'react';
+import { StateMapping, RowMapping } from '@common/Interfaces';
+import { Section } from '@common/Constants';
+import BoardButton, { BoardButtonType } from './BoardButton';
 
 interface SideRowProps extends React.ClassAttributes<SideRow> {
-  sideMapping: RowMapping
-  sideMappingStates: StateMapping[]
-  selectButton: (section?: Section, x?: number, y?: number) => void
+  sideMapping: RowMapping;
+  sideMappingStates: StateMapping[];
+  selectButton: (section?: Section, x?: number, y?: number) => void;
 }
 
 export default class SideRow extends React.Component<SideRowProps> {
-  public constructor (props: SideRowProps) {
-    super(props)
+  public constructor(props: SideRowProps) {
+    super(props);
     this.selectButton = this.selectButton.bind(this);
   }
 
   selectButton(x?: number, y?: number) {
     if (x === undefined || y === undefined) {
-      this.props.selectButton(undefined)
+      this.props.selectButton(undefined);
     } else {
-      this.props.selectButton(Section.Side, x, y)
+      this.props.selectButton(Section.Side, x, y);
     }
   }
 
   getStateMapping(x: number, y: number): StateMapping {
     for (const item of this.props.sideMappingStates) {
-      if (item.x === x && item.y === y)
-        return item
+      if (item.x === x && item.y === y) return item;
     }
     return {
       x: x,
@@ -42,15 +38,15 @@ export default class SideRow extends React.Component<SideRowProps> {
       flashing: false,
       editing: false,
       pressed: false,
-      name: ''
-    }
+      name: '',
+    };
   }
 
-  public render (): JSX.Element {
-    const buttons: JSX.Element[] = []
+  public render(): JSX.Element {
+    const buttons: JSX.Element[] = [];
     let count = 8;
     for (const id of this.props.sideMapping.two) {
-      const stateMapping = this.getStateMapping(1, count)
+      const stateMapping = this.getStateMapping(1, count);
       buttons.push(
         <BoardButton
           key={`${1},${count}`}
@@ -68,10 +64,10 @@ export default class SideRow extends React.Component<SideRowProps> {
           pressed={stateMapping.pressed}
           hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
           name={stateMapping.name}
-        />
-      )
+        />,
+      );
       count--;
     }
-    return <div className={"side-row"}>{buttons}</div>
+    return <div className={'side-row'}>{buttons}</div>;
   }
 }

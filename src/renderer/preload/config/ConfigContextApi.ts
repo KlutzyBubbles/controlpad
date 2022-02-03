@@ -1,11 +1,11 @@
 import { ConfigContextApi } from './ConfigContext';
-import electronConfig from './ElectronConfig'
+import electronConfig from './ElectronConfig';
 
 type AddedProps = {
-  electron_config: typeof electronConfig
+  electron_config: typeof electronConfig;
 }
 
-type CombinedWindow = typeof window & AddedProps
+type CombinedWindow = typeof window & AddedProps;
 
 const context: ConfigContextApi = (window as CombinedWindow).electron_config.config;
 

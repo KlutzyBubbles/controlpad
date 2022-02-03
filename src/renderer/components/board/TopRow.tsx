@@ -1,36 +1,32 @@
-import { hasKeyCombo } from '@common/Utils'
-import * as React from 'react'
-import {
-  StateMapping,
-  RowMapping
-} from '@common/Interfaces'
-import { Section } from '@common/Constants'
-import BoardButton, { BoardButtonType } from './BoardButton'
+import { hasKeyCombo } from '@common/Utils';
+import * as React from 'react';
+import { StateMapping, RowMapping } from '@common/Interfaces';
+import { Section } from '@common/Constants';
+import BoardButton, { BoardButtonType } from './BoardButton';
 
 interface TopRowProps extends React.ClassAttributes<TopRow> {
-  topMapping: RowMapping
-  topMappingStates: StateMapping[]
-  selectButton: (section?: Section, x?: number, y?: number) => void
+  topMapping: RowMapping;
+  topMappingStates: StateMapping[];
+  selectButton: (section?: Section, x?: number, y?: number) => void;
 }
 
 export default class TopRow extends React.Component<TopRowProps> {
-  public constructor (props: TopRowProps) {
-    super(props)
+  public constructor(props: TopRowProps) {
+    super(props);
     this.selectButton = this.selectButton.bind(this);
   }
 
   selectButton(x?: number, y?: number) {
     if (x === undefined || y === undefined) {
-      this.props.selectButton(undefined)
+      this.props.selectButton(undefined);
     } else {
-      this.props.selectButton(Section.Top, x, y)
+      this.props.selectButton(Section.Top, x, y);
     }
   }
 
   getStateMapping(x: number, y: number): StateMapping {
     for (const item of this.props.topMappingStates) {
-      if (item.x === x && item.y === y)
-        return item
+      if (item.x === x && item.y === y) return item;
     }
     return {
       x: x,
@@ -42,15 +38,15 @@ export default class TopRow extends React.Component<TopRowProps> {
       flashing: false,
       editing: false,
       pressed: false,
-      name: ''
-    }
+      name: '',
+    };
   }
 
-  public render (): JSX.Element {
-    const buttons: JSX.Element[] = []
+  public render(): JSX.Element {
+    const buttons: JSX.Element[] = [];
     let count = 1;
     for (const id of this.props.topMapping.two) {
-      const stateMapping = this.getStateMapping(count, 1)
+      const stateMapping = this.getStateMapping(count, 1);
       buttons.push(
         <BoardButton
           key={`${count},${1}`}
@@ -68,10 +64,10 @@ export default class TopRow extends React.Component<TopRowProps> {
           pressed={stateMapping.pressed}
           hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
           name={stateMapping.name}
-        />
-      )
+        />,
+      );
       count++;
     }
-    return <div className={"top-row"}>{buttons}</div>
+    return <div className={'top-row'}>{buttons}</div>;
   }
 }

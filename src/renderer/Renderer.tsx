@@ -7,7 +7,7 @@ console.log('[CP] : Renderer execution started');
 
 const app = (
   <WindowFrame title='ControlPad' platform='windows'>
-      <App />
+    <App />
   </WindowFrame>
 );
 

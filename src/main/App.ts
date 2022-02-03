@@ -6,7 +6,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 app.on('ready', () => {
-  createAppWindow()
+  createAppWindow();
 });
 
 app.on('activate', () => {

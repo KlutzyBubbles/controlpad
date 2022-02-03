@@ -4,4 +4,4 @@ const electronWindow = {
   titlebar: titlebarContext,
 }
 
-export default electronWindow
+export default electronWindow;

@@ -4,4 +4,4 @@ const electronKeyboard = {
   keyboard: keyboardContext,
 }
 
-export default electronKeyboard
+export default electronKeyboard;

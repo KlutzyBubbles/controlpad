@@ -1,36 +1,32 @@
-import { hasKeyCombo } from '@common/Utils'
-import * as React from 'react'
-import {
-  StateMapping,
-  RowMapping
-} from '@common/Interfaces'
-import { Section } from '@common/Constants'
-import BoardButton, { BoardButtonType } from './BoardButton'
+import { hasKeyCombo } from '@common/Utils';
+import * as React from 'react';
+import { StateMapping, RowMapping } from '@common/Interfaces';
+import { Section } from '@common/Constants';
+import BoardButton, { BoardButtonType } from './BoardButton';
 
 interface MainBoardProps extends React.ClassAttributes<MainBoard> {
-  mainMapping?: RowMapping[]
-  mainMappingStates: StateMapping[]
-  selectButton: (section?: Section, x?: number, y?: number) => void
+  mainMapping?: RowMapping[];
+  mainMappingStates: StateMapping[];
+  selectButton: (section?: Section, x?: number, y?: number) => void;
 }
 
 export default class MainBoard extends React.Component<MainBoardProps> {
-  public constructor (props: MainBoardProps) {
-    super(props)
+  public constructor(props: MainBoardProps) {
+    super(props);
     this.selectButton = this.selectButton.bind(this);
   }
 
   selectButton(x?: number, y?: number) {
     if (x === undefined || y === undefined) {
-      this.props.selectButton(undefined)
+      this.props.selectButton(undefined);
     } else {
-      this.props.selectButton(Section.Main, x, y)
+      this.props.selectButton(Section.Main, x, y);
     }
   }
 
   getStateMapping(x: number, y: number): StateMapping {
     for (const item of this.props.mainMappingStates) {
-      if (item.x === x && item.y === y)
-        return item
+      if (item.x === x && item.y === y) return item;
     }
     return {
       x: x,
@@ -42,18 +38,18 @@ export default class MainBoard extends React.Component<MainBoardProps> {
       flashing: false,
       editing: false,
       pressed: false,
-      name: ''
-    }
+      name: '',
+    };
   }
 
-  public render (): JSX.Element {
-    const rows: JSX.Element[] = []
+  public render(): JSX.Element {
+    const rows: JSX.Element[] = [];
     let yCount = 8;
     for (const rowMapping of this.props.mainMapping) {
-      const buttons: JSX.Element[] = []
+      const buttons: JSX.Element[] = [];
       let xCount = 1;
       for (const id of rowMapping.two) {
-        const stateMapping = this.getStateMapping(xCount, yCount)
+        const stateMapping = this.getStateMapping(xCount, yCount);
         buttons.push(
           <BoardButton
             key={`${xCount},${yCount}`}
@@ -71,17 +67,17 @@ export default class MainBoard extends React.Component<MainBoardProps> {
             pressed={stateMapping.pressed}
             hasKeyCombo={hasKeyCombo(stateMapping.keyCombo)}
             name={stateMapping.name}
-          />
-        )
+          />,
+        );
         xCount++;
       }
       rows.push(
-        <div key={yCount} className={"row"}>
+        <div key={yCount} className={'row'}>
           {buttons}
-        </div>
-      )
+        </div>,
+      );
       yCount--;
     }
-    return <div className={"main-board"}>{rows}</div>
+    return <div className={'main-board'}>{rows}</div>;
   }
 }

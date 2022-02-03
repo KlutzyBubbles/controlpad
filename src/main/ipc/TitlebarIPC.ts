@@ -52,19 +52,19 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
       filters: [
         {
           name: 'ControlPad Config Files',
-          extensions: ['json']
-        }
+          extensions: ['json'],
+        },
       ],
       properties: [
         'showHiddenFiles',
         'createDirectory',
-        'showOverwriteConfirmation'
-      ]
-    })
+        'showOverwriteConfirmation',
+      ],
+    });
     if (result.canceled) {
-      console.log('Config was not saved due to being cancelled')
+      console.log('Config was not saved due to being cancelled');
     } else {
-      saveToFile(result.filePath)
+      saveToFile(result.filePath);
     }
   });
 
@@ -74,39 +74,35 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
       filters: [
         {
           name: 'ControlPad Config Files',
-          extensions: ['json']
-        }
+          extensions: ['json'],
+        },
       ],
-      properties: [
-        'showHiddenFiles',
-        'createDirectory',
-        'openFile'
-      ]
-    })
+      properties: ['showHiddenFiles', 'createDirectory', 'openFile'],
+    });
     if (result.canceled) {
-      console.log('Config was not loaded due to being cancelled')
-      return undefined
+      console.log('Config was not loaded due to being cancelled');
+      return undefined;
     } else {
-      const mappings = await loadFromFile(result.filePaths[0])
-      mainWindow.webContents.send('state-mapping-load', mappings)
-      return mappings
+      const mappings = await loadFromFile(result.filePaths[0]);
+      mainWindow.webContents.send('state-mapping-load', mappings);
+      return mappings;
     }
   });
 
   ipcMain.handle('window-minimize-tray', async () => {
-    mainWindow.hide()
+    mainWindow.hide();
   });
 
   ipcMain.handle('window-startup-launch', async () => {
-    console.log('NOT IMPLEMENTED')
+    console.log('NOT IMPLEMENTED');
   });
 
   ipcMain.handle('window-startup-minimized', async () => {
-    console.log('NOT IMPLEMENTED')
+    console.log('NOT IMPLEMENTED');
   });
 
   ipcMain.handle('app-update-check', async () => {
-    console.log('NOT IMPLEMENTED')
+    console.log('NOT IMPLEMENTED');
   });
 
   ipcMain.handle('app-open-about', async () => {
@@ -119,12 +115,12 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
     Chrome Version: ${process.versions['chrome']}
 
     ControlPad © ${new Date().getFullYear()} KlutzyBubbles
-    `
+    `;
     dialog.showMessageBox({
       type: 'info',
       buttons: ['ok'],
       title: 'About ControlPad',
-      message: message
+      message: message,
     });
   });
 
