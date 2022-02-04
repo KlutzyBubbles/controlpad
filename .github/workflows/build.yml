@@ -12,7 +12,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     outputs:
-      run_lint: ${{ join(steps.run_lint.outputs.*, '\n' }}
+      run_lint: ${{ join(steps.run_lint.outputs.*, '\n') }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
