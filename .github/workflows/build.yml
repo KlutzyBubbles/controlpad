@@ -73,6 +73,15 @@ jobs:
       #   with:
       #     fileName: 'win-certificate.pfx'
       #     encodedString: ${{ secrets.WINDOWS_CODESIGN_P12 }}
+      # - name: Add msbuild to PATH
+      #   if: matrix.os == 'windows-latest'
+      #   uses: microsoft/setup-msbuild@v1.0.0
+      # - name: patch node gyp on windows to support Visual Studio 2019
+      #   if: matrix.os == 'windows-latest'
+      #   shell: powershell
+      #   run: |
+      #     npm install --global node-gyp@latest
+      #     npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
       - name: Install
         run: npm install
       - name: Make
