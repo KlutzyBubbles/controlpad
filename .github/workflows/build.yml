@@ -11,6 +11,7 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/')}}
     outputs:
       run_lint: ${{ join(steps.run_lint.outputs.*, '\n') }}
     steps:
