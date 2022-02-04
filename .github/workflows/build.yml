@@ -86,7 +86,7 @@ jobs:
         run: npm install
       - name: Make
         if: startsWith(github.ref, 'refs/tags/')
-        run: npm run make --arch=all
+        run: npm run make -- --arch=all
         # env:
         #   APPLE_ID: ${{ secrets.APPLE_ID }}
         #   APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
