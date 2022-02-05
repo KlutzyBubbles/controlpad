@@ -3,11 +3,12 @@ import path from 'path';
 import { registerTitlebarIpc } from '@main/ipc/TitlebarIPC';
 import registerConfigIPC from './ipc/ConfigIPC';
 import registerKeyboardIPC from './ipc/KeyboardIPC';
+// import log from 'electron-log';
 
 declare const APP_WINDOW_WEBPACK_ENTRY: string;
 declare const APP_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-const iconPath = path.resolve('assets/icon.ico');
+const iconPath = app.isPackaged ? path.resolve('./resources/icon.ico') : path.resolve('./assets/icon.ico');
 let appWindow: BrowserWindow;
 let appTray: Tray;
 

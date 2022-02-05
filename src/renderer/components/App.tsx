@@ -24,6 +24,7 @@ import Launchpad from '@common/Launchpad';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import { hasKeyCombo } from '@common/Utils';
+// import logContext from '@preload/log/LogContextApi';
 
 export interface SelectedButton {
   section: Section;

@@ -4,9 +4,10 @@ const package = require('./package.json');
 
 module.exports = {
   packagerConfig: {
-    asar: true,
+    asar: false,
     executableName: 'controlpad',
     appCopyright: `Copyright (C) ${new Date().getFullYear()} KlutzyBubbles`,
+    extraResource: path.resolve(rootDir, 'assets', 'icon.ico'),
   },
   makers: [
     {
