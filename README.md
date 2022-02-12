@@ -20,3 +20,18 @@ Builds in release are built using `npm run make -- --arch=all` but the `-- --arc
 - Add play sound as function
 - Fix 5 second delay for device startup (devices boot with animation)
 - Add a mapping helper for unknown devices
+
+
+## Versioning
+
+`npm version prepatch --preid=alpha`
+`npm version prepatch --preid=beta`
+`npm version patch`
+
+### Undo version
+
+`git reset --hard origin/master`
+
+### Push version
+
+`git push --tags`
