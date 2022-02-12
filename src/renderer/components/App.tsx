@@ -20,7 +20,7 @@ import { styled, ThemeProvider } from '@mui/material/styles';
 import configContext from '@preload/config/ConfigContextApi';
 import keyboardContext from '@preload/keyboard/KeyboardContextApi';
 import { theme } from './Theme';
-import Launchpad from '@common/Launchpad';
+import Launchpad, { ColorInput, FlashInput } from '@common/Launchpad';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import { hasKeyCombo } from '@common/Utils';
@@ -141,19 +141,21 @@ export default class App extends React.Component<
   }
 
   initiateAllColors(launchpad: Launchpad) {
+    var colors: ColorInput[] = []
     for (const sectionName in this.state.stateMappings) {
       const section = parseInt(sectionName);
       for (const state of this.state.stateMappings[sectionName]) {
-        launchpad.setColor(
-          section,
-          state.x,
-          state.y,
-          Color.fromRgba(
+        colors.push({
+          section: section,
+          x: state.x,
+          y: state.y,
+          color: Color.fromRgba(
             state.pressed ? state.activeColor : state.inactiveColor,
-          ),
-        );
+          )
+        })
       }
     }
+    launchpad.setColorMultiple(colors)
   }
 
   pressed(location: number[], name: string) {
@@ -221,7 +223,7 @@ export default class App extends React.Component<
     }
   }
 
-  refreshBoardState() {
+  async refreshBoardState() {
     if (
       padManagerInstance.online &&
       padManagerInstance.selectedDevice !== undefined
@@ -230,27 +232,31 @@ export default class App extends React.Component<
         padManagerInstance.selectedDevice,
       );
       if (launchpad !== undefined) {
+        var colors: ColorInput[] = []
+        var flashingColors: FlashInput[] = []
         for (const sectionName in this.state.stateMappings) {
           const section = parseInt(sectionName);
           for (const state of this.state.stateMappings[sectionName]) {
-            launchpad.setColor(
-              section,
-              state.x,
-              state.y,
-              Color.fromRgba(
+            colors.push({
+              section: section,
+              x: state.x,
+              y: state.y,
+              color: Color.fromRgba(
                 state.pressed ? state.activeColor : state.inactiveColor,
-              ),
-            );
+              )
+            })
             if (state.editing) {
-              launchpad.startFlash(
-                section,
-                state.x,
-                state.y,
-                PresetColor.White,
-              );
+              flashingColors.push({
+                section: section,
+                x: state.x,
+                y: state.y,
+                color: PresetColor.White
+              })
             }
           }
         }
+        await launchpad.setColorMultiple(colors)
+        await launchpad.startFlashMultiple(flashingColors)
       }
     }
   }
@@ -411,8 +417,9 @@ export default class App extends React.Component<
 
   clearAll = (section: Section, x: number, y: number) => {
     this.setState(
-      this.changeState(this.state, section, x, y, {}, true) as AppState,
+      this.changeState(this.state, section, x, y, { editing: true }, true) as AppState,
     );
+    this.selectButton(undefined)
   };
 
   public render(): JSX.Element {
@@ -458,6 +465,7 @@ export default class App extends React.Component<
             </Grid>
             <Grid item xs={12} sm>
               <Editor
+                key={`${this.state.selected?.section},${this.state.selected?.x},${this.state.selected?.y}`}
                 changeColor={this.changeColor}
                 changeName={this.changeName}
                 changeKeyCombo={this.changeKeyCombo}

@@ -41,6 +41,7 @@ export default class KeyEditor extends React.Component<
     this.setState({
       keyCombo: {},
     });
+    this.refreshKeys();
   };
 
   handleKeyDown = (keydownEvent: React.KeyboardEvent) => {
@@ -89,6 +90,7 @@ export default class KeyEditor extends React.Component<
         keyCombo: combo,
       });
     }
+    this.refreshKeys();
   };
 
   getKeyDisplay = () => {
@@ -163,7 +165,6 @@ export default class KeyEditor extends React.Component<
   };
 
   public render(): JSX.Element {
-    this.refreshKeys();
     return (
       <React.Fragment>
         <Stack

@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import { Section } from '@common/Constants';
+import Container from '@mui/material/Container';
 
 interface ColorEditorProps {
   selectedButton: SelectedButton;
@@ -96,6 +97,7 @@ export default class ColorEditor extends React.Component<
         true,
       );
     }
+    this.refreshColors();
   };
 
   handleInactiveChange = (color: MUIColor, radio = false) => {
@@ -116,6 +118,7 @@ export default class ColorEditor extends React.Component<
         false,
       );
     }
+    this.refreshColors();
   };
 
   refreshColors(init = false) {
@@ -222,7 +225,6 @@ export default class ColorEditor extends React.Component<
   };
 
   public render(): JSX.Element {
-    this.refreshColors();
     return (
       <Stack
         direction='column'
@@ -230,56 +232,74 @@ export default class ColorEditor extends React.Component<
         alignItems='flex-start'
         spacing={2}
       >
-        <Stack
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='center'
-          spacing={0}
-        >
-          <Typography sx={{ mr: 2 }} variant='h6' gutterBottom component='div'>
-            Inactive
-          </Typography>
-          <ColorPicker
-            disableAlpha={true}
-            hideTextfield={true}
-            value={this.state.inactiveColor}
-            onChange={this.handleInactiveChange}
-          />
-          <Radio {...this.inactiveItemProps(PresetColor.Black)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Red)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Lime)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Blue)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Yellow)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Orange)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Pink)} />
-          <Radio {...this.inactiveItemProps(PresetColor.Purple)} />
-          <Radio {...this.inactiveItemProps(PresetColor.LightBlue)} />
-        </Stack>
-        <Stack
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='center'
-          spacing={0}
-        >
-          <Typography sx={{ mr: 2 }} variant='h6' gutterBottom component='div'>
-            Active
-          </Typography>
-          <ColorPicker
-            disableAlpha={true}
-            hideTextfield={true}
-            value={this.state.activeColor}
-            onChange={this.handleActiveChange}
-          />
-          <Radio {...this.activeItemProps(PresetColor.Black)} />
-          <Radio {...this.activeItemProps(PresetColor.Red)} />
-          <Radio {...this.activeItemProps(PresetColor.Lime)} />
-          <Radio {...this.activeItemProps(PresetColor.Blue)} />
-          <Radio {...this.activeItemProps(PresetColor.Yellow)} />
-          <Radio {...this.activeItemProps(PresetColor.Orange)} />
-          <Radio {...this.activeItemProps(PresetColor.Pink)} />
-          <Radio {...this.activeItemProps(PresetColor.Purple)} />
-          <Radio {...this.activeItemProps(PresetColor.LightBlue)} />
-        </Stack>
+        <Container>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            spacing={3}
+            alignItems='baseline'
+          >
+            <Typography sx={{ mr: 2 }} variant='h6' gutterBottom component='div'>
+              Inactive
+            </Typography>
+            <Stack
+              direction='row'
+              justifyContent='flex-start'
+              alignItems='center'
+              spacing={0}
+            >
+              <ColorPicker
+                disableAlpha={true}
+                hideTextfield={true}
+                value={this.state.inactiveColor}
+                onChange={this.handleInactiveChange}
+              />
+              <Radio {...this.inactiveItemProps(PresetColor.Black)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Red)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Lime)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Blue)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Yellow)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Orange)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Pink)} />
+              <Radio {...this.inactiveItemProps(PresetColor.Purple)} />
+              <Radio {...this.inactiveItemProps(PresetColor.LightBlue)} />
+            </Stack>
+          </Stack>
+        </Container>
+        <Container>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            spacing={3}
+            alignItems='baseline'
+          >
+            <Typography sx={{ mr: 2 }} variant='h6' gutterBottom component='div'>
+              Active
+            </Typography>
+            <Stack
+              direction='row'
+              justifyContent='flex-start'
+              alignItems='center'
+              spacing={0}
+            >
+              <ColorPicker
+                disableAlpha={true}
+                hideTextfield={true}
+                value={this.state.activeColor}
+                onChange={this.handleActiveChange}
+              />
+              <Radio {...this.activeItemProps(PresetColor.Black)} />
+              <Radio {...this.activeItemProps(PresetColor.Red)} />
+              <Radio {...this.activeItemProps(PresetColor.Lime)} />
+              <Radio {...this.activeItemProps(PresetColor.Blue)} />
+              <Radio {...this.activeItemProps(PresetColor.Yellow)} />
+              <Radio {...this.activeItemProps(PresetColor.Orange)} />
+              <Radio {...this.activeItemProps(PresetColor.Pink)} />
+              <Radio {...this.activeItemProps(PresetColor.Purple)} />
+              <Radio {...this.activeItemProps(PresetColor.LightBlue)} />
+            </Stack>
+          </Stack>
+        </Container>
       </Stack>
     );
   }

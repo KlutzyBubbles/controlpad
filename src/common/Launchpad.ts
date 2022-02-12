@@ -4,6 +4,21 @@ import { PresetColor, Section } from './Constants';
 import { Mapping } from './Interfaces';
 import { EventEmitter } from 'events';
 import { getTypeMapping, LaunchpadType } from './LaunchPadMappings';
+import { color } from '@mui/system';
+
+export interface ColorInput {
+  section: Section
+  x: number
+  y: number
+  color: Color
+}
+
+export interface FlashInput {
+  section: Section
+  x: number
+  y: number
+  color: PresetColor
+}
 
 export default class Launchpad extends EventEmitter {
   name: string;
@@ -136,6 +151,26 @@ export default class Launchpad extends EventEmitter {
     }
   }
 
+  async setColorMultiple(inputs: ColorInput[]) {
+    var colorSequence: number[] = []
+    for (var input of inputs) {
+      const buttonNumber = await this.getButtonNumber(input.section, input.x, input.y);
+      if (buttonNumber === undefined)
+        console.warn(`Invalname button lookup for ${input.section}, (${input.x}, ${input.y})`);
+      else {
+        colorSequence.push(buttonNumber)
+        colorSequence.push(...input.color.toRgb6Array())
+      }
+    }
+    const mapping = await this.getTypeMappings();
+    this.output.sendSysex(
+      [],
+      mapping.sysExSequence.concat(
+        [0x0b].concat(colorSequence),
+      ),
+    );
+  }
+
   async startFlash(section: Section, x: number, y: number, color: PresetColor) {
     const mapping = await this.getTypeMappings();
     const buttonNumber = await this.getButtonNumber(section, x, y);
@@ -147,6 +182,26 @@ export default class Launchpad extends EventEmitter {
         mapping.sysExSequence.concat([0x23, 0x00, buttonNumber, color]),
       );
     }
+  }
+
+  async startFlashMultiple(inputs: FlashInput[]) {
+    var colorSequence: number[] = []
+    for (var input of inputs) {
+      const buttonNumber = await this.getButtonNumber(input.section, input.x, input.y);
+      if (buttonNumber === undefined)
+        console.warn(`Invalname button lookup for ${input.section}, (${input.x}, ${input.y})`);
+      else {
+        colorSequence.push(buttonNumber)
+        colorSequence.push(input.color)
+      }
+    }
+    const mapping = await this.getTypeMappings();
+    this.output.sendSysex(
+      [],
+      mapping.sysExSequence.concat(
+        [0x23, 0x00].concat(colorSequence),
+      ),
+    );
   }
 
   async getType(): Promise<LaunchpadType> {
