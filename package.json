@@ -1,7 +1,7 @@
 {
   "name": "controlpad",
   "productName": "controlpad",
-  "version": "0.0.2-alpha.8",
+  "version": "0.0.3-alpha.0",
   "description": "Application to allow the LaunchPad to control things",
   "main": ".webpack/main",
   "scripts": {
