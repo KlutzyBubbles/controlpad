@@ -1,5 +1,10 @@
-import { BrowserWindow, ipcMain, shell, dialog } from 'electron';
+import { BrowserWindow, ipcMain, shell, dialog, app, autoUpdater } from 'electron';
 import { loadFromFile, saveToFile } from '@main/ConfigStore';
+import { https } from 'follow-redirects';
+
+const server = 'https://controlpad-updater.vercel.app'
+const url = `${server}/update/${process.platform}/${app.getVersion()}`
+autoUpdater.setFeedURL({ url })
 
 export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   ipcMain.handle('window-minimize', () => {
@@ -102,7 +107,34 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('app-update-check', async () => {
-    console.log('NOT IMPLEMENTED');
+    try {
+      autoUpdater.checkForUpdates()
+      console.log('Done');
+    } catch (e) {
+      console.log('url:', url)
+      https.request(url, (res) => {
+        console.log('statusCode:', res.statusCode);
+        console.log('headers:', res.headers);
+        var body = '';
+        res.on('data', (d) => {
+          console.log('data')
+          console.log(d)
+          body += d;
+        });
+
+        res.on('end', (data: any) => {
+          try {
+            console.log('end')
+            console.log(data)
+            console.log(body)
+          } catch {
+            console.log('error')
+          }
+        });
+      }).on('error', (error) => {
+        console.warn('Checking for update failed, if you are not in a development environment then the update server is probably down', error)
+      }).end();
+    }
   });
 
   ipcMain.handle('app-open-about', async () => {
