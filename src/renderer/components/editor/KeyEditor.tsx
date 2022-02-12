@@ -183,18 +183,26 @@ export default class KeyEditor extends React.Component<
             onKeyDown={this.handleKeyDown}
           />
         </Stack>
-        <Button
-          variant={this.state.keyCombo.toggle ? 'outlined' : 'contained'}
-          onClick={this.handleTapToggleClick.bind(this, false)}
+        <Stack
+          direction='row'
+          justifyContent='left'
+          alignItems='stretch'
+          spacing={2}
+          sx={{ mb: 2 }}
         >
-          Tap
-        </Button>
-        <Button
-          variant={this.state.keyCombo.toggle ? 'contained' : 'outlined'}
-          onClick={this.handleTapToggleClick.bind(this, true)}
-        >
-          Toggle
-        </Button>
+          <Button
+            variant={this.state.keyCombo.toggle ? 'outlined' : 'contained'}
+            onClick={this.handleTapToggleClick.bind(this, false)}
+          >
+            Tap
+          </Button>
+          <Button
+            variant={this.state.keyCombo.toggle ? 'contained' : 'outlined'}
+            onClick={this.handleTapToggleClick.bind(this, true)}
+          >
+            Toggle
+          </Button>
+        </Stack>
       </React.Fragment>
     );
   }
