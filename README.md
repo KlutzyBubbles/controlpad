@@ -9,6 +9,8 @@ Builds in release are built using `npm run make -- --arch=all` but the `-- --arc
 ## TODO
 
 - Be more efficient with device lighting updates
+- Add check for update functionality
+- Have launchpad display change size
 - Fix issues with colors not visually resetting on clear all
 - Create updating
 - Add functionality for all settings items
