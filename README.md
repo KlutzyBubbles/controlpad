@@ -31,6 +31,7 @@ Builds in release are built using `npm run make -- --arch=all` but the `-- --arc
 ### Undo version
 
 `git reset --hard origin/master`
+`git fetch origin --prune --tags`
 
 ### Push version
 
