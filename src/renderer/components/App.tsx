@@ -16,13 +16,10 @@ import equal from 'fast-deep-equal';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import { styled, ThemeProvider } from '@mui/material/styles';
 import configContext from '@preload/config/ConfigContextApi';
 import keyboardContext from '@preload/keyboard/KeyboardContextApi';
-import { theme } from './Theme';
 import Launchpad, { ColorInput, FlashInput } from '@common/Launchpad';
 import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
 import { hasKeyCombo } from '@common/Utils';
 // import logContext from '@preload/log/LogContextApi';
 
@@ -423,14 +420,8 @@ export default class App extends React.Component<
   };
 
   public render(): JSX.Element {
-    const Item = styled(Paper)(({ theme }) => ({
-      ...theme.typography.body2,
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    }));
     return (
-      <ThemeProvider theme={theme}>
+      <React.Fragment>
         <Typography
           sx={{ mt: 2 }}
           variant='h4'
@@ -476,7 +467,7 @@ export default class App extends React.Component<
             </Grid>
           </Grid>
         </Container>
-      </ThemeProvider>
+      </React.Fragment>
     );
   }
 }

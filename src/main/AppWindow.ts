@@ -58,6 +58,10 @@ export function createAppWindow(): BrowserWindow {
     appWindow.show();
   });
 
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception', error)
+  });
+
   registerMainIPC();
   appWindow.on('close', () => {
     appWindow = null;
