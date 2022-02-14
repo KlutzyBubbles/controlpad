@@ -1,6 +1,7 @@
 import { BrowserWindow, ipcMain, shell, dialog, app, autoUpdater } from 'electron';
 import { loadFromFile, saveToFile } from '@main/ConfigStore';
 import { https } from 'follow-redirects';
+import { rejects } from 'assert';
 
 const server = 'https://controlpad-updater.vercel.app'
 const url = `${server}/update/${process.platform}/${app.getVersion()}`
@@ -109,31 +110,46 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
   ipcMain.handle('app-update-check', async () => {
     try {
       autoUpdater.checkForUpdates()
-      console.log('Done');
+      return new Promise((resolve) => {
+        autoUpdater.once('update-not-available', () => {
+          resolve(false)
+        })
+        autoUpdater.once('update-available', () => {
+          resolve(true)
+        })
+        setTimeout(() => {
+          resolve(undefined)
+        }, 30000)
+      })
     } catch (e) {
-      console.log('url:', url)
-      https.request(url, (res) => {
-        console.log('statusCode:', res.statusCode);
-        console.log('headers:', res.headers);
-        var body = '';
-        res.on('data', (d) => {
-          console.log('data')
-          console.log(d)
-          body += d;
-        });
-
-        res.on('end', (data: any) => {
-          try {
-            console.log('end')
-            console.log(data)
-            console.log(body)
-          } catch {
-            console.log('error')
-          }
-        });
-      }).on('error', (error) => {
-        console.warn('Checking for update failed, if you are not in a development environment then the update server is probably down', error)
-      }).end();
+      return new Promise((resolve) => {
+        https.request(url, (res) => {
+          var body = '';
+          res.on('data', (d) => {
+            body += d;
+          });
+          res.on('end', () => {
+            try {
+              if (res.statusCode === 204) {
+                resolve(false)
+                console.log('Currently on latest version')
+              } else if (res.statusCode !== 200) {
+                resolve(undefined)
+                console.warn('Invlaid response for update check')
+              } else {
+                var json = JSON.parse(body);
+                resolve(true)
+                console.log('Found update, but running outside of package so cant update', json)
+              }
+            } catch {
+              console.log('Error parsing result')
+            }
+          });
+        }).on('error', (error) => {
+          resolve(undefined)
+          console.warn('Checking for update failed, if you are not in a development environment then the update server is probably down', error)
+        }).end();
+      })
     }
   });
 
@@ -141,7 +157,7 @@ export const registerTitlebarIpc = (mainWindow: BrowserWindow) => {
     const message = `
     'ControlPad' by KlutzyBubbles
 
-    ControlPad Version: ${process.env['npm_package_version']}
+    ControlPad Version: ${app.getVersion()}
     Electron Version: ${process.versions['electron']}
     Node Version: ${process.versions['node']}
     Chrome Version: ${process.versions['chrome']}

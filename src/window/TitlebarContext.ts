@@ -47,7 +47,7 @@ const titlebarContext = {
     ipcRenderer.invoke('window-startup-minimized');
   },
   update_check() {
-    ipcRenderer.invoke('app-update-check');
+    return ipcRenderer.invoke('app-update-check');
   },
   open_about() {
     ipcRenderer.invoke('app-open-about');
