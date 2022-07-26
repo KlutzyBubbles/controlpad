@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Color, RGB } from '@common/Color';
-import { StateMappings } from '@common/Interfaces';
-import { SelectedButton } from '@renderer/components/App';
+import { StateMappings, SelectedButton } from '@common/Interfaces';
 import {
   Color as MUIColor,
   ColorPicker,

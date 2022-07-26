@@ -1,4 +1,5 @@
 import { RGB } from './Color';
+import { Section } from '@common/Constants';
 
 export interface AnyNumberArray {
   [key: string]: number[];
@@ -13,7 +14,8 @@ export interface StateMapping {
   y: number;
   activeColor: RGB;
   inactiveColor: RGB;
-  keyCombo: KeyCombo;
+  keyCombo?: KeyCombo;
+  playSound?: PlaySound;
   pulsing: boolean;
   flashing: boolean;
   editing: boolean;
@@ -27,6 +29,7 @@ export interface StateMappingOptional {
   activeColor?: RGB;
   inactiveColor?: RGB;
   keyCombo?: KeyCombo;
+  playSound?: PlaySound;
   pulsing?: boolean;
   flashing?: boolean;
   editing?: boolean;
@@ -63,6 +66,25 @@ export interface Mapping {
   gridMappings?: GridMapping;
 }
 
+export interface PlaySound {
+  soundFile?: string;
+  colorMode?: string;
+  alt?: string;
+  keys?: string[];
+  toggle?: boolean;
+}
+
+export enum ColorMode {
+  Tap = 0,
+  ChangeWhilePlaying = 1
+}
+
+export enum PlayMode {
+  TapStartStop = 0,
+  TapStartStart = 1,
+  HoldToPlay = 2
+}
+
 export interface KeyCombo {
   ctrl?: string;
   shift?: string;
@@ -74,3 +96,24 @@ export interface KeyComboIPC {
   keyCombo: KeyCombo;
   active: boolean;
 }
+
+export interface SelectedButton {
+  section: Section;
+  x: number;
+  y: number;
+}
+
+interface PadStatus {
+  preparing: boolean;
+  displayName: string;
+  name: string;
+  mapping: Mapping;
+}
+
+export interface AppState {
+  selected?: SelectedButton;
+  stateMappings?: StateMappings;
+  lastColorUpdate?: number;
+  padStatus?: PadStatus;
+}
+

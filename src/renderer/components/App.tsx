@@ -3,45 +3,28 @@ import './less/App.less';
 import LaunchPad from './board/LaunchPad';
 import {
   StateMappings,
-  StateMapping,
-  StateMappingOptional,
   KeyCombo,
-  Mapping,
+  PlaySound,
+  AppState,
 } from '@common/Interfaces';
-import { Section, PresetColor } from '@common/Constants';
+import { Section } from '@common/Constants';
 import Editor from './editor/Editor';
-import { Color, RGB } from '@common/Color';
+import { RGB } from '@common/Color';
 import { padManagerInstance } from '@common/PadManager';
-import equal from 'fast-deep-equal';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import configContext from '@preload/config/ConfigContextApi';
-import keyboardContext from '@preload/keyboard/KeyboardContextApi';
-import Launchpad, { ColorInput, FlashInput } from '@common/Launchpad';
 import Chip from '@mui/material/Chip';
-import { hasKeyCombo } from '@common/Utils';
-// import logContext from '@preload/log/LogContextApi';
-
-export interface SelectedButton {
-  section: Section;
-  x: number;
-  y: number;
-}
-
-interface PadStatus {
-  preparing: boolean;
-  displayName: string;
-  name: string;
-  mapping: Mapping;
-}
-
-interface AppState {
-  selected: SelectedButton | undefined;
-  stateMappings: StateMappings;
-  lastColorUpdate: number;
-  padStatus?: PadStatus;
-}
+import {
+  selectButton,
+  changeColor,
+  changeName,
+  changeKeyCombo,
+  changePlaySound,
+  clearAll
+} from '@common/ConfigFunctions'
+import { initiateLaunchpad, pressed, released } from '@common/LaunchpadFunctions'
 
 export default class App extends React.Component<
   Record<string, never>,
@@ -74,349 +57,54 @@ export default class App extends React.Component<
     });
   }
 
-  getColor(section: Section, x: number, y: number, active: boolean): Color {
-    let stateMappingsSection: StateMapping[] = [];
-    if (Object.prototype.hasOwnProperty.call(this.state.stateMappings, section))
-      stateMappingsSection = this.state.stateMappings[section];
-    let index = -1;
-    for (let i = 0; i < stateMappingsSection.length; i++) {
-      const item = stateMappingsSection[i];
-      if (item.x === x && item.y === y) {
-        index = i;
-        break;
-      }
-    }
-    if (index === -1) {
-      return Color.fromRgba({ r: 0, g: 0, b: 0 });
-    } else {
-      if (active)
-        return Color.fromRgba(stateMappingsSection[index].activeColor);
-      return Color.fromRgba(stateMappingsSection[index].inactiveColor);
-    }
-  }
-
   prepareInput(name: string) {
     if (padManagerInstance.online) {
       const launchpad = padManagerInstance.getLaunchpad(name);
       if (launchpad !== undefined) {
         const listenerTimer = setTimeout(() => {
           if (launchpad !== undefined) {
-            this.initiateLaunchpad(launchpad);
+            initiateLaunchpad(this.state, launchpad).then((newState) => this.setState(newState));
           }
         }, 5000);
         launchpad.once('type', () => {
           clearTimeout(listenerTimer);
           if (launchpad !== undefined) {
-            this.initiateLaunchpad(launchpad);
+            initiateLaunchpad(this.state, launchpad).then((newState) => this.setState(newState));
           }
         });
         launchpad.getType();
         launchpad.on('pressed', (location, name) => {
-          this.pressed(location, name);
+          pressed(this.state, location, name);
         });
         launchpad.on('released', (location, name) => {
-          this.released(location, name);
+          released(this.state, location, name);
         });
       }
     }
   }
-
-  initiateLaunchpad(launchpad: Launchpad) {
-    this.initiateAllColors(launchpad);
-    launchpad.getDisplayName().then((name) => {
-      launchpad.getTypeMappings().then((mapping) => {
-        this.setState({
-          padStatus: {
-            displayName: name,
-            name: launchpad.name,
-            preparing: false,
-            mapping: mapping,
-          },
-        });
-      });
-    });
-  }
-
-  initiateAllColors(launchpad: Launchpad) {
-    var colors: ColorInput[] = []
-    for (const sectionName in this.state.stateMappings) {
-      const section = parseInt(sectionName);
-      for (const state of this.state.stateMappings[sectionName]) {
-        colors.push({
-          section: section,
-          x: state.x,
-          y: state.y,
-          color: Color.fromRgba(
-            state.pressed ? state.activeColor : state.inactiveColor,
-          )
-        })
-      }
-    }
-    launchpad.setColorMultiple(colors)
-  }
-
-  pressed(location: number[], name: string) {
-    if (padManagerInstance.online) {
-      const launchpad = padManagerInstance.getLaunchpad(name);
-      if (launchpad !== undefined) {
-        this.setState(
-          this.changeState(this.state, location[0], location[1], location[2], {
-            pressed: true,
-          }) as AppState,
-        );
-        this.setColor(launchpad, location, true);
-        this.runKeyCombo(location, true);
-      }
-    }
-  }
-
-  released(location: number[], name: string) {
-    if (padManagerInstance.online) {
-      const launchpad = padManagerInstance.getLaunchpad(name);
-      if (launchpad !== undefined) {
-        this.setState(
-          this.changeState(this.state, location[0], location[1], location[2], {
-            pressed: false,
-          }) as AppState,
-        );
-        this.setColor(launchpad, location, false);
-        this.runKeyCombo(location, false);
-      }
-    }
-  }
-
-  setColor(launchpad: Launchpad, location: number[], active: boolean) {
-    launchpad.setColor(
-      location[0],
-      location[1],
-      location[2],
-      this.getColor(location[0], location[1], location[2], active),
-    );
-  }
-
-  runKeyCombo(location: number[], active: boolean) {
-    const section = location[0];
-    const x = location[1];
-    const y = location[2];
-    let stateMappingsSection: StateMapping[] = [];
-    if (Object.prototype.hasOwnProperty.call(this.state.stateMappings, section))
-      stateMappingsSection = this.state.stateMappings[section];
-    let index = -1;
-    for (let i = 0; i < stateMappingsSection.length; i++) {
-      const item = stateMappingsSection[i];
-      if (item.x === x && item.y === y) {
-        index = i;
-        break;
-      }
-    }
-    if (index !== -1) {
-      const keyCombo = stateMappingsSection[index].keyCombo;
-      if (hasKeyCombo(keyCombo)) {
-        keyboardContext.runKeyCombo({
-          keyCombo: keyCombo,
-          active: active,
-        });
-      }
-    }
-  }
-
-  async refreshBoardState() {
-    if (
-      padManagerInstance.online &&
-      padManagerInstance.selectedDevice !== undefined
-    ) {
-      const launchpad = padManagerInstance.getLaunchpad(
-        padManagerInstance.selectedDevice,
-      );
-      if (launchpad !== undefined) {
-        var colors: ColorInput[] = []
-        var flashingColors: FlashInput[] = []
-        for (const sectionName in this.state.stateMappings) {
-          const section = parseInt(sectionName);
-          for (const state of this.state.stateMappings[sectionName]) {
-            colors.push({
-              section: section,
-              x: state.x,
-              y: state.y,
-              color: Color.fromRgba(
-                state.pressed ? state.activeColor : state.inactiveColor,
-              )
-            })
-            if (state.editing) {
-              flashingColors.push({
-                section: section,
-                x: state.x,
-                y: state.y,
-                color: PresetColor.White
-              })
-            }
-          }
-        }
-        await launchpad.setColorMultiple(colors)
-        await launchpad.startFlashMultiple(flashingColors)
-      }
-    }
-  }
-
-  getTypeofProperty<T, K extends keyof T>(o: T, name: K) {
-    return typeof o[name];
-  }
-
-  changeState = (
-    state: AppState,
-    section: Section,
-    x: number,
-    y: number,
-    newState: StateMappingOptional,
-    override = false,
-  ): Omit<AppState, keyof AppState> => {
-    if (!Object.prototype.hasOwnProperty.call(state.stateMappings, section))
-      state.stateMappings[section] = [];
-    let index = -1;
-    for (let i = 0; i < state.stateMappings[section].length; i++) {
-      const item = state.stateMappings[section][i];
-      if (item.x === x && item.y === y) {
-        index = i;
-        break;
-      }
-    }
-    let oldObject: StateMapping = {
-      x: x,
-      y: y,
-      activeColor: { r: 0, g: 0, b: 0 },
-      inactiveColor: { r: 0, g: 0, b: 0 },
-      keyCombo: {},
-      pulsing: false,
-      flashing: false,
-      editing: false,
-      pressed: false,
-      name: '',
-    };
-    let newObject: StateMapping = oldObject;
-    let changed = false;
-    const mappings = state.stateMappings;
-    if (index === -1) {
-      newObject = { ...oldObject, ...newState };
-      changed = !equal(oldObject, newObject);
-      mappings[section].push(newObject);
-    } else {
-      if (!override) oldObject = state.stateMappings[section][index];
-      newObject = { ...oldObject, ...newState };
-      changed = !equal(oldObject, newObject);
-      mappings[section][index] = newObject;
-    }
-    if (changed) {
-      const result = {
-        stateMappings: mappings,
-      };
-      configContext.saveMappings(result);
-      // ipcRenderer.invoke('mappings-save', result)
-      return result;
-    }
-    return {};
-  };
-
-  changeAndSetState = (
-    section: Section,
-    x: number,
-    y: number,
-    newState: StateMappingOptional,
-  ) => {
-    const changedState = this.changeState(this.state, section, x, y, newState);
-    if (changedState === {}) return;
-    this.setState({ ...changedState });
-  };
 
   selectButton = (section?: Section, x?: number, y?: number) => {
-    x = x || -1;
-    y = y || -1;
-    const mappings = this.state.stateMappings;
-    for (const sectionMapping in mappings) {
-      for (const item of mappings[sectionMapping]) {
-        item.editing = false;
-      }
-    }
-    this.setState({
-      stateMappings: mappings,
-    });
-    if (section === undefined) {
-      this.setState({
-        selected: undefined,
-      });
-    } else {
-      this.setState({
-        ...this.changeState(this.state, section, x, y, {
-          editing: true,
-        }),
-        ...{
-          selected: {
-            section: section,
-            x: x,
-            y: y,
-          },
-        },
-      });
-    }
-    this.refreshBoardState();
+    this.setState(selectButton(this.state, section, x, y))
   };
 
-  changeColor = (
-    section: Section,
-    x: number,
-    y: number,
-    color: RGB,
-    active: boolean,
-  ) => {
-    if (
-      active == false &&
-      padManagerInstance.online &&
-      padManagerInstance.selectedDevice !== undefined
-    ) {
-      const launchpad = padManagerInstance.getLaunchpad(
-        padManagerInstance.selectedDevice,
-      );
-      const now = Date.now();
-      if (now - this.state.lastColorUpdate > 100) {
-        launchpad?.setColor(section, x, y, Color.fromRgba(color));
-        this.setState({
-          lastColorUpdate: now,
-        });
-      }
-    }
-    const changes: StateMappingOptional = {};
-    if (active) changes.activeColor = color;
-    else changes.inactiveColor = color;
-    this.setState(
-      this.changeState(this.state, section, x, y, changes) as AppState,
-    );
+  changeColor = (section: Section, x: number, y: number, color: RGB, active: boolean) => {
+    this.setState(changeColor(this.state, section, x, y, color, active))
   };
 
   changeName = (section: Section, x: number, y: number, name: string) => {
-    this.setState(
-      this.changeState(this.state, section, x, y, {
-        name: name,
-      }) as AppState,
-    );
+    this.setState(changeName(this.state, section, x, y, name))
   };
 
-  changeKeyCombo = (
-    section: Section,
-    x: number,
-    y: number,
-    combo: KeyCombo,
-  ) => {
-    this.setState(
-      this.changeState(this.state, section, x, y, {
-        keyCombo: combo,
-      }) as AppState,
-    );
+  changeKeyCombo = (section: Section, x: number, y: number, combo: KeyCombo) => {
+    this.setState(changeKeyCombo(this.state, section, x, y, combo))
+  };
+
+  changePlaySound = (section: Section, x: number, y: number, playSound: PlaySound) => {
+    this.setState(changePlaySound(this.state, section, x, y, playSound))
   };
 
   clearAll = (section: Section, x: number, y: number) => {
-    this.setState(
-      this.changeState(this.state, section, x, y, { editing: true }, true) as AppState,
-    );
-    this.selectButton(undefined)
+    this.setState(clearAll(this.state, section, x, y))
   };
 
   public render(): JSX.Element {

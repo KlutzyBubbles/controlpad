@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { KeyCombo, StateMappings } from '@common/Interfaces';
+import { KeyCombo, StateMappings, SelectedButton } from '@common/Interfaces';
 import { sectionToString } from '@common/Utils';
-import { SelectedButton } from '@renderer/components/App';
 import ColorEditor from './ColorEditor';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
