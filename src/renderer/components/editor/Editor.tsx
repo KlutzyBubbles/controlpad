@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { KeyCombo, StateMappings, SelectedButton } from '@common/Interfaces';
+import { KeyCombo, StateMappings, SelectedButton, PlaySound } from '@common/Interfaces';
 import { sectionToString } from '@common/Utils';
 import ColorEditor from './ColorEditor';
 import Accordion from '@mui/material/Accordion';
@@ -36,6 +36,12 @@ interface BoardButtonProps extends React.ClassAttributes<BoardButton> {
     x: number,
     y: number,
     combo: KeyCombo,
+  ) => void;
+  changePlaySound: (
+    section: Section,
+    x: number,
+    y: number,
+    playSound: PlaySound
   ) => void;
   clearAll: (section: Section, x: number, y: number) => void;
   stateMappings: StateMappings;

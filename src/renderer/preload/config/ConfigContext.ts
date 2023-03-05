@@ -1,16 +1,18 @@
-import { StateMappings } from '@common/Interfaces';
+import { MappingEventItem, SoundEventItem, StateMappings } from '@common/Interfaces';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 
-type EventItem = {
-  stateMappings: StateMappings;
-}
-
 const configContext = {
-  saveMappings(event: EventItem) {
+  saveMappings(event: MappingEventItem) {
     ipcRenderer.invoke('mappings-save', event);
   },
   loadMappings() {
     return ipcRenderer.invoke('mappings-load');
+  },
+  saveSoundLocation(event: SoundEventItem) {
+    ipcRenderer.invoke('sound-save', event);
+  },
+  loadSoundLocation() {
+    return ipcRenderer.invoke('sound-save');
   },
   addChangeListener(func: (loadedMappings: StateMappings) => void) {
     loadListeners.push(func)

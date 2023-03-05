@@ -1,24 +1,26 @@
 import * as React from 'react';
-import { KeyCombo, StateMappings, SelectedButton } from '@common/Interfaces';
+import { KeyCombo, StateMappings, SelectedButton, PlaySound } from '@common/Interfaces';
 import Stack from '@mui/material/Stack';
 import { Section } from '@common/Constants';
-import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 
 interface KeyEditorProps {
   selectedButton: SelectedButton;
   stateMappings: StateMappings;
-  changeKeyCombo: (
+  soundOptions: String[];
+  changePlaySound: (
     section: Section,
     x: number,
     y: number,
-    combo: KeyCombo,
+    playSound: PlaySound,
   ) => void;
 }
 
 interface KeyEditorState {
   currentSelected: SelectedButton;
-  keyCombo: KeyCombo;
+  playSound: PlaySound;
 }
 
 export default class KeyEditor extends React.Component<
@@ -106,7 +108,7 @@ export default class KeyEditor extends React.Component<
     return display.join(' + ');
   };
 
-  refreshKeys(init = false) {
+  refreshSounds(init = false) {
     if (
       !Object.prototype.hasOwnProperty.call(
         this.props.stateMappings,
@@ -128,12 +130,12 @@ export default class KeyEditor extends React.Component<
         ) {
           if (init) {
             return {
-              keyCombo: state.keyCombo || {},
+              playSound: state.playSound || {},
               currentSelected: this.props.selectedButton,
             };
           } else {
             this.setState({
-              keyCombo: state.keyCombo || {},
+              playSound: state.playSound || {},
               currentSelected: this.props.selectedButton,
             });
           }
@@ -142,28 +144,53 @@ export default class KeyEditor extends React.Component<
     }
   }
 
-  handleTapToggleClick = (toggle: boolean) => {
-    if (this.state.keyCombo.toggle === undefined)
+  handleTapColorToggleClick = (toggle: boolean) => {
+    if (this.state.playSound.colorToggle === undefined)
       this.setState({
-        keyCombo: {
-          toggle: false,
+        playSound: {
+          colorToggle: false,
         },
       });
-    if (this.state.keyCombo.toggle === toggle) return;
-    const combo = this.state.keyCombo;
-    combo.toggle = toggle;
-    this.props.changeKeyCombo(
+    if (this.state.playSound.colorToggle === toggle) return;
+    const sound = this.state.playSound;
+    sound.colorToggle = toggle;
+    this.props.changePlaySound(
       this.props.selectedButton.section,
       this.props.selectedButton.x,
       this.props.selectedButton.y,
-      combo,
+      sound,
     );
     this.setState({
-      keyCombo: combo,
+      playSound: sound,
+    });
+  };
+
+  handleTapSoundToggleClick = (toggle: boolean) => {
+    if (this.state.playSound.toggle === undefined)
+      this.setState({
+        playSound: {
+          toggle: false,
+        },
+      });
+    if (this.state.playSound.toggle === toggle) return;
+    const sound = this.state.playSound;
+    sound.toggle = toggle;
+    this.props.changePlaySound(
+      this.props.selectedButton.section,
+      this.props.selectedButton.x,
+      this.props.selectedButton.y,
+      sound,
+    );
+    this.setState({
+      playSound: sound,
     });
   };
 
   public render(): JSX.Element {
+    let options = []
+    for (var option of this.props.soundOptions) {
+      options.push(<MenuItem value={option}>{option}</MenuItem>)
+    }
     return (
       <React.Fragment>
         <Stack
@@ -173,14 +200,16 @@ export default class KeyEditor extends React.Component<
           spacing={2}
           sx={{ mb: 2 }}
         >
-          <TextField
-            id='key-name'
-            label='Name'
+          <Select
+            id='sound-name'
+            label='Sound'
             variant='standard'
             onFocus={this.handleKeyTextFocus}
             value={this.getKeyDisplay()}
             onKeyDown={this.handleKeyDown}
-          />
+          >
+            {options}
+          </Select>
         </Stack>
         <Stack
           direction='row'
@@ -190,16 +219,36 @@ export default class KeyEditor extends React.Component<
           sx={{ mb: 2 }}
         >
           <Button
-            variant={this.state.keyCombo.toggle ? 'outlined' : 'contained'}
-            onClick={this.handleTapToggleClick.bind(this, false)}
+            variant={this.state.playSound.toggle ? 'outlined' : 'contained'}
+            onClick={this.handleTapColorToggleClick.bind(this, false)}
           >
-            Tap
+            Color Hold
           </Button>
           <Button
-            variant={this.state.keyCombo.toggle ? 'contained' : 'outlined'}
-            onClick={this.handleTapToggleClick.bind(this, true)}
+            variant={this.state.playSound.toggle ? 'contained' : 'outlined'}
+            onClick={this.handleTapColorToggleClick.bind(this, true)}
           >
-            Toggle
+            Color Toggle
+          </Button>
+        </Stack>
+        <Stack
+          direction='row'
+          justifyContent='left'
+          alignItems='stretch'
+          spacing={2}
+          sx={{ mb: 2 }}
+        >
+          <Button
+            variant={this.state.playSound.toggle ? 'outlined' : 'contained'}
+            onClick={this.handleTapSoundToggleClick.bind(this, false)}
+          >
+            Sound Hold
+          </Button>
+          <Button
+            variant={this.state.playSound.toggle ? 'contained' : 'outlined'}
+            onClick={this.handleTapSoundToggleClick.bind(this, true)}
+          >
+            Sound Toggle
           </Button>
         </Stack>
       </React.Fragment>

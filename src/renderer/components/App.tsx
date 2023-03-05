@@ -148,6 +148,7 @@ export default class App extends React.Component<
                 changeColor={this.changeColor}
                 changeName={this.changeName}
                 changeKeyCombo={this.changeKeyCombo}
+                changePlaySound={this.changePlaySound}
                 clearAll={this.clearAll}
                 selectedButton={this.state.selected}
                 stateMappings={this.state.stateMappings}

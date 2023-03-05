@@ -4,6 +4,7 @@ import fs from 'fs';
 
 export interface ConfigStore {
   stateMappings: StateMappings;
+  soundLocation: String;
 }
 
 const configStore = new Store<ConfigStore>();

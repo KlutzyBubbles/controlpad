@@ -41,6 +41,15 @@ export interface StateMappings {
   [key: string]: StateMapping[];
 }
 
+export type MappingEventItem = {
+  stateMappings: StateMappings;
+}
+
+export type SoundEventItem = {
+  soundLocation: string;
+}
+
+
 export interface RowMapping {
   one: number;
   two: number[];
@@ -68,9 +77,7 @@ export interface Mapping {
 
 export interface PlaySound {
   soundFile?: string;
-  colorMode?: string;
-  alt?: string;
-  keys?: string[];
+  colorToggle?: boolean;
   toggle?: boolean;
 }
 
